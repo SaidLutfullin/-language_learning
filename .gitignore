@@ -1,0 +1,6 @@
+__pycache__/
+db.sqlite3
+config_file.py
+logs.json
+my_dictionary/media/
+my_dictionary/static/
