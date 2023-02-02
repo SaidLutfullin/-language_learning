@@ -30,7 +30,8 @@
           {% include 'authentication/inc/_form_errors.html' %}
           <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
           <hr class="my-4">
-          <small class="text-muted">Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></small>
+          <small class="text-muted">Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></small><br>
+          <small class="text-muted">Забыли пароль? <a href="{% url 'reset_password' %}">Восстановите</a></small>
         </form>
       </div>
     </div>

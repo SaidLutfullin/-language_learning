@@ -25,7 +25,7 @@ class ContactUs(FormView):
                 full_name = self.request.user.username
 
             email = self.request.user.email
-            user_id = self.request.user.id
+            #user_id = self.request.user.id
             return {
                 'name':full_name,
                 'email':email
@@ -34,6 +34,7 @@ class ContactUs(FormView):
     def form_valid(self, form):
         try:
             send_email(self.request.user.id, form.cleaned_data)
+            self.object = form.save()
             messages.success(self.request, 'Сообщение отправлено')
             return HttpResponseRedirect(self.get_success_url())
         except Exception as ex:

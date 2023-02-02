@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import ListView, UpdateView, FormView
 from .models import Words
-from .forms import AddinWordForm, AskingForm, EditingForm, Exporting, Importing
+from .forms import AddinWordForm, AskingForm, EditingForm, Exporting
 from .words_operation import (TestItem, get_words_list, get_dictionary_statistics,
-                                export_words, import_words)
+                                export_words)
 from loguru import logger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from datetime import date
-from django.http import HttpResponseRedirect, FileResponse
+from django.http import HttpResponseRedirect
 import re
 
 class AddingWord(LoginRequiredMixin, FormView):
@@ -175,17 +175,3 @@ class Exporting(LoginRequiredMixin, FormView):
         fields = [key for key in form.cleaned_data if form.cleaned_data[key]]
         path = export_words(self.request.user.pk, fields)
         return FileResponse(open(path,'rb'))
-
-
-class Importing(LoginRequiredMixin, FormView):
-    form_class = Importing
-    template_name = 'dictionary/importing.html'
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["label_suffix"] = ""
-        return kwargs
-
-    def form_valid(self, form):
-        logger.error(form.cleaned_data['file'])
-        import_words(form.cleaned_data['file'])

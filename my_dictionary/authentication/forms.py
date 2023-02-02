@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import (UserCreationForm, AuthenticationForm, UserChangeForm,
+                                    PasswordChangeForm, PasswordResetForm, SetPasswordForm)
 from .models import User
 
 class RegisterUserForm(UserCreationForm):
@@ -41,7 +42,6 @@ class CustomUserChangeForm(UserChangeForm):
         }
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-
     old_password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     new_password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     new_password2 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -50,3 +50,23 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         model = User
         fields = ('old_password', 'new_password1', 'new_password2')
 
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=254,
+        widget=forms.EmailInput(attrs={"autocomplete": "email", "class": "form-control", "placeholder": "email"}),
+    )
+
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "class": "form-control", "placeholder": "пароль1"}),
+        strip=False
+    )
+    new_password2 = forms.CharField(
+        label="New password confirmation",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "class": "form-control", "placeholder": "пароль2"}),
+    )

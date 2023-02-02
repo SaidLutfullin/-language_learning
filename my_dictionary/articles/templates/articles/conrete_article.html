@@ -1,10 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+
+
 {% block styles %}
 <link type="text/css" href="{% static 'articles/css/styles.css' %}" rel="stylesheet" />
 <link type="text/css" href="{% static 'css/tables.css' %}" rel="stylesheet" />
+<link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
 {% endblock %}
+
+{% block scripts %}
+<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+<script src="{% static 'django_ckeditor_5/dist/translations/ru.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+{% endblock %}
+
 
 {% block title%}
 {{ article.title }}
@@ -18,5 +29,49 @@
     {% autoescape off %}
     {{article.text|linebreaks}}
     {% endautoescape %}
+</div>
+
+<div class="container mt-5">
+    <div class="container" id="comment">
+        <h3>Оставить коммментарий</h3>
+        <p><small>Ваш e-mail не будет опубликован</small></p>
+
+        <div class="ck-content container">
+        <form method = "POST" action="#comment">
+            {% csrf_token %}
+            {{form.as_p }}
+            <p><small>Максимальная длина комментария 1000 символов</small></p>
+            <p>
+            <button type="submit" class="btn btn-outline-primary">Отправить комментарий</button>
+            </p>
+        </form>
+        </div>
+
+    </div>
+    
+    <div class="container">
+        {% with comments.count as total_comments %}
+            <h2>
+            Комментариев: {{ total_comments }} 
+            </h2>
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        {% for comment in comments %}
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm  position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block">{{ comment.name }}</strong>
+                    <small class="mb-3 text-muted">{{ comment.created }}</small>
+                    {% autoescape off %}
+                    {{comment.text}}
+                    {% endautoescape %}
+                </div>
+
+            </div>
+        {% empty %}
+            <p>Будьте первым, кто оставит комментарий!</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

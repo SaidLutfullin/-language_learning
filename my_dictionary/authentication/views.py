@@ -7,13 +7,17 @@ from common.mixins.access_mixins import LogoutRequiredMixin
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from .forms import RegisterUserForm, LoginUserForm, CustomUserChangeForm, CustomPasswordChangeForm
+from .forms import (RegisterUserForm, LoginUserForm, CustomUserChangeForm,
+                    CustomPasswordChangeForm, CustomPasswordResetForm,
+                    CustomSetPasswordForm)
 from .forms import User
 from loguru import logger
 from django.shortcuts import get_object_or_404
 from dictionary.words_operation import get_dictionary_statistics
 from diary.models import Diary
-from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import (PasswordChangeView, PasswordChangeDoneView, PasswordResetView,
+                                        PasswordResetConfirmView, PasswordResetCompleteView,
+                                        PasswordResetDoneView)
 
 class RegisterUser(LogoutRequiredMixin, CreateView):
     form_class = RegisterUserForm
@@ -34,6 +38,25 @@ class ChangePassword(LoginRequiredMixin, PasswordChangeView):
 
 class ChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = "authentication/password_change_done.html"
+
+
+class ResetPassword(LogoutRequiredMixin, PasswordResetView):
+    template_name = "authentication/password_reset_form.html"
+    email_template_name = "authentication/password_reset_email.html"
+    form_class = CustomPasswordResetForm
+
+
+class PasswordResetDone(LogoutRequiredMixin, PasswordResetDoneView):
+    template_name = "authentication/password_reset_done.html"
+
+
+class PasswordResetConfirm(LogoutRequiredMixin, PasswordResetConfirmView):
+    success_url = reverse_lazy("password_reset_complete")
+    template_name = "authentication/password_reset_confirm.html"
+    form_class = CustomSetPasswordForm
+
+class PasswordResetComplete(LogoutRequiredMixin, PasswordResetCompleteView):
+    template_name = "authentication/password_reset_complete.html"
 
 
 @logger.catch

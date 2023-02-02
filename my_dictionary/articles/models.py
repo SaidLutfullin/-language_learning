@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from loguru import logger
 from django.utils import timezone
+from django_ckeditor_5.fields import CKEditor5Field
+from PIL import Image
 
 class Article(models.Model):
     title = models.CharField(max_length=250, verbose_name='Заголовок')
@@ -16,7 +18,7 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('articles', kwargs={'id': self.pk})
+        return reverse('show_article', kwargs={'article_slug': self.slug})
 
     class Meta:
         verbose_name = 'Статьи'
@@ -31,3 +33,20 @@ class Article(models.Model):
                 previous_main_page.is_main_page = False
                 previous_main_page.save()
         super(Article, self).save(*args, **kwargs)
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(Article, verbose_name='Статья', on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(verbose_name='Имя', max_length=80)
+    email = models.EmailField(verbose_name='E-mail', max_length=100)
+    text = models.CharField('Текст', max_length=1000)
+    created = models.DateTimeField(default=timezone.now, verbose_name='Оставлен')
+    active = models.BooleanField(default=True, verbose_name='Активный')
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f'{self.name} прокоментировал стаьтю {self.article}'

@@ -266,7 +266,6 @@ from openpyxl import Workbook,load_workbook
 from openpyxl.styles import Border, Side, Font, Alignment
 from openpyxl.utils import get_column_letter
 
-
 def export_words(user_id,fields):
     words_list = Words.objects.filter(user_id=user_id).values(*fields)
 
@@ -312,39 +311,3 @@ def export_words(user_id,fields):
     path = os.path.join(settings.MEDIA_ROOT, 'users', str(user_id), 'export.xlsx')
     work_book.save(path)
     return path
-
-
-from dataclasses import dataclass
-@dataclass
-class Column:
-    letter:str
-    name:str
-    russian_name:str
-
-def import_words(file):
-    fields_in_russian = {
-        'russian_word':'Русское слово',
-        'foreign_word':'Иностранное слово',
-        'context':'Контекст',
-        'box_number':'Коробка',
-        'asking_date':'Дата повторения',
-    }
-
-    fields_in_russian = {v:k for k, v in fields_in_russian.items()}
-    
-    columns = {}
-
-    work_book = load_workbook(file)
-    for cell in work_book.worksheets[0][1]:
-        columns[cell.column_letter] = fields_in_russian[cell.value]
-
-    logger.success(work_book.worksheets[0].rows[0])
-
-    fer = []
-    for row in work_book.worksheets[0]:
-        di = {}
-        for cell in row:
-            di[columns[cell.column_letter]]=cell.value
-        fer.append(di)
-
-    logger.error(fer)

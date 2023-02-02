@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (Dictionary, AddingWord, EditWord,
-                    test, cards, Exporting, Importing)
+                    test, cards, Exporting)
 
 urlpatterns = [
     path('dictionary/', Dictionary.as_view(), name='dictionary'),
@@ -9,5 +9,4 @@ urlpatterns = [
     path('cards', cards, name='cards'),
     path('edit/', EditWord.as_view(), name='edit'),
     path('export/', Exporting.as_view(), name='export'),
-    path('import/', Importing.as_view(), name='import'),
 ]

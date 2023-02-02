@@ -1,10 +1,11 @@
 from pathlib import Path
 from loguru import logger
-from .config_file import (API_KEY, DB_NAME, DB_USER,
+from django.contrib.messages import constants as messages
+from .config_file import (API_KEY, DB_NAME, DB_USER, ALLOWED_HOSTS,
                         DB_PASSWORD, EMAIL_HOST,
                         EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
                         EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL,
-                        DEFAULT_FROM_EMAIL)
+                        DEFAULT_FROM_EMAIL, DEBUG)
 
 
 logger.add('logs.json', format='{time} {level} {message}', level='ERROR', rotation="500 MB",
@@ -13,7 +14,7 @@ logger.add('logs.json', format='{time} {level} {message}', level='ERROR', rotati
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = API_KEY
-DEBUG = True
+DEBUG = DEBUG
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
@@ -32,7 +33,9 @@ INSTALLED_APPS = [
     'diary.apps.DiaryConfig',
     'django_ckeditor_5',
     'django_cleanup'
+    
 ]
+
 
 MIDDLEWARE = [
 
@@ -96,9 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-Ru'
 TIME_ZONE = 'Europe/Moscow'
+
 USE_I18N = True
 USE_TZ = True
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
@@ -220,8 +223,6 @@ CKEDITOR_5_CONFIGS = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
-from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
