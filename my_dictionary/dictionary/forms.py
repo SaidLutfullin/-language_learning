@@ -46,3 +46,16 @@ class EditingForm(AddinWordForm):
     from_scratch = forms.BooleanField(label="Учить по-новой",
                                     required=False,
                                     widget=forms.CheckboxInput(attrs={'class': 'form-check-input toggle'}))
+
+
+class Exporting(forms.Form):
+    russian_word = forms.BooleanField(label='Русское слово', initial=True, required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    foreign_word = forms.BooleanField(label='Перевод', initial=True, required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    context = forms.BooleanField(label='Контекст', initial=True, required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    box_number = forms.BooleanField(label='Номер коробки', required=False, widget=forms.CheckboxInput (attrs={'class': 'form-check-input'}))
+    asking_date = forms.BooleanField(label='Дата ближайшего повторения', required=False, widget=forms.CheckboxInput (attrs={'class': 'form-check-input'}))
+
+
+class Importing(forms.Form):
+    file = forms.FileField(label='Файл импорта')
+    save_word_with_invalid_context = forms.BooleanField(label='Сохранять слова с некоректным контекстом', required=False, widget=forms.CheckboxInput (attrs={'class': 'form-check-input'}))

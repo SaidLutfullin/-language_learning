@@ -3,6 +3,7 @@ from .models import Words
 from random import randint
 from loguru import logger
 from django.db.models import Q
+from django.conf import settings
 
 class Corrector():
     def __levenshtein_distance(self, s1, s2):
@@ -259,3 +260,91 @@ def get_dictionary_statistics(user_id):
         'learned_words_number':words_list.filter(box_number=6).count()
     }
     return statistics
+
+import os
+from openpyxl import Workbook,load_workbook
+from openpyxl.styles import Border, Side, Font, Alignment
+from openpyxl.utils import get_column_letter
+
+
+def export_words(user_id,fields):
+    words_list = Words.objects.filter(user_id=user_id).values(*fields)
+
+    work_book = Workbook()
+    spreadsheet = work_book.active
+    spreadsheet.title = "Мой словарь"
+    bd = Side(border_style='thin')
+    border = Border(left=bd, top=bd, right=bd, bottom=bd)
+
+    fields_in_russian = {
+        'russian_word':'Русское слово',
+        'foreign_word':'Иностранное слово',
+        'context':'Контекст',
+        'box_number':'Коробка',
+        'asking_date':'Дата повторения',
+    }
+    fields = [fields_in_russian[field_name] for field_name in fields]
+    spreadsheet.append(fields)
+
+    for cell in spreadsheet[1]:
+        column_letter = get_column_letter(cell.column)
+        spreadsheet.column_dimensions[column_letter].width = 25
+        cell.border = border
+        cell.font = Font(bold=True, size=11)
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    spreadsheet.row_dimensions[1].height = 25
+
+    for word in words_list:
+        row_number = spreadsheet.max_row + 1
+        for column_index, column_key in enumerate(word):
+            column_letter = get_column_letter(column_index+1)
+            if column_key == 'asking_date':
+                spreadsheet[f'{column_letter}{row_number}'] = word[column_key].strftime("%d.%m.%Y")
+            else:
+                spreadsheet[f'{column_letter}{row_number}'] = word[column_key]
+            
+            if column_key == 'asking_date' or column_key == 'box_number':
+                spreadsheet[f'{column_letter}{row_number}'].alignment = Alignment(wrap_text=True, horizontal="center")
+            else:
+                spreadsheet[f'{column_letter}{row_number}'].alignment = Alignment(wrap_text=True)
+            spreadsheet[f'{column_letter}{row_number}'].border = border
+            spreadsheet[f'{column_letter}{row_number}'].font = Font(size=10)
+    path = os.path.join(settings.MEDIA_ROOT, 'users', str(user_id), 'export.xlsx')
+    work_book.save(path)
+    return path
+
+
+from dataclasses import dataclass
+@dataclass
+class Column:
+    letter:str
+    name:str
+    russian_name:str
+
+def import_words(file):
+    fields_in_russian = {
+        'russian_word':'Русское слово',
+        'foreign_word':'Иностранное слово',
+        'context':'Контекст',
+        'box_number':'Коробка',
+        'asking_date':'Дата повторения',
+    }
+
+    fields_in_russian = {v:k for k, v in fields_in_russian.items()}
+    
+    columns = {}
+
+    work_book = load_workbook(file)
+    for cell in work_book.worksheets[0][1]:
+        columns[cell.column_letter] = fields_in_russian[cell.value]
+
+    logger.success(work_book.worksheets[0].rows[0])
+
+    fer = []
+    for row in work_book.worksheets[0]:
+        di = {}
+        for cell in row:
+            di[columns[cell.column_letter]]=cell.value
+        fer.append(di)
+
+    logger.error(fer)
