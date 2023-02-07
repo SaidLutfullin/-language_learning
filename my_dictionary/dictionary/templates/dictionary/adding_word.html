@@ -6,6 +6,7 @@
 
 {% block body%}
 <div class="container bg-light p-5 rounded">
+    <h1>Добавьте новое слово</h1>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}

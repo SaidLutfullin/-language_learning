@@ -64,27 +64,22 @@
           </div>
         </div>
       </div>
+      
       <div class="col">
         <div class="card mb-4 rounded-3 shadow-sm">
           <div class="card-header py-3">
-            <h4 class="my-0 fw-normal">Слова</h4>
+            <h4 class="my-0 fw-normal">Экспорт</h4>
           </div>
-
-          <div class="card-body text-start">
-            <form id="start-test-form">
-              <ul class="list-unstyled mt-3 mb-4">
-                <div class="list-group mx-0 w-auto">
-                  <label class="d-flex gap-2 mb-3">
-                    <a href="{% url 'export' %}" id="start-test-button" class="w-100 btn btn-lg btn-outline-primary non_underline">Экспортировать</a>
-                  </label>               
-                </div>
-              </ul>
-            </form>
+          <div class="card-body">
+            <div class="list-unstyled mt-3 mb-4">
+              <p>Скачайте все слова себе на компьютер</p>
+              <p>в виде документа формата Excel</p>
+            </div>
+            <a href="{% url 'export' %}" class="w-100 btn btn-lg btn-outline-primary non_underline mt-4">Экспортировать</a>
           </div>
-
-
         </div>
       </div>
+
     </div>
   <div class="card mb-4 rounded-3 shadow-sm">
       <div class="container my-4 ">

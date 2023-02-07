@@ -25,17 +25,16 @@ class AddinWordForm(ModelForm):
                                                     'class':'form-control'}),
         }
 
-    @logger.catch
     def clean_context(self):
-            context = self.cleaned_data['context']
-            foreign_word = self.cleaned_data['foreign_word']
-            russian_word = self.cleaned_data['russian_word']
-            if context != "":
-                context_edited = context.replace(foreign_word, f'({russian_word})')
-                #means that the context doesn't contain new word
-                if context_edited == context:
-                    raise ValidationError('Контекст не содержит изучаемого слова')
-            return context
+        context = self.cleaned_data['context']
+        foreign_word = self.cleaned_data['foreign_word']
+        russian_word = self.cleaned_data['russian_word']
+        if context != "":
+            context_edited = context.replace(foreign_word, f'({russian_word})')
+            #means that the context doesn't contain new word
+            if context_edited == context:
+                raise ValidationError('Контекст не содержит изучаемого слова')
+        return context
 
 
 class AskingForm(forms.Form):

@@ -247,6 +247,7 @@ def get_words_list(user_id, search_query):
         words_list = words_list.filter(
                 Q(russian_word__icontains=search_query) |
                 Q(foreign_word__icontains=search_query) |
+                #БАГ!
                 Q(foreign_word__icontains=search_query)
             )
     return words_list
