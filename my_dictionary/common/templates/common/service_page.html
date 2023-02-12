@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title%}
+{{page.title}}
+{% endblock %}
+
+{% block body%}
+<div class="container mt-5">
+    <h1>{{page.title}}</h1>
+    {% autoescape off %}
+    {{page.text|linebreaks}}
+    {% endautoescape %}
+</div>
+{% endblock %}

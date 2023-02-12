@@ -17,7 +17,8 @@ class User(AbstractUser):
     gender = models.CharField(max_length=1, choices=GENDER, blank=True)
     avatar = models.ImageField(upload_to=image_upload_to, blank=True)
     about_me = models.TextField(blank=True)
-    language_learned = models.CharField(max_length=100, blank=True)
+    language_learned = models.ForeignKey('dictionary.language',
+                                         on_delete=models.PROTECT, default=1)
     
     def __str__(self):
         return self.username

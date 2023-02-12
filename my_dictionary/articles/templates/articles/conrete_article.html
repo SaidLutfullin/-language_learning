@@ -40,7 +40,6 @@
         <form method = "POST" action="#comment">
             {% csrf_token %}
             {{form.as_p }}
-            <p><small>Максимальная длина комментария 1000 символов</small></p>
             <p>
             <button type="submit" class="btn btn-outline-primary">Отправить комментарий</button>
             </p>

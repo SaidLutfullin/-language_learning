@@ -16,33 +16,34 @@ class NewDay(LoginRequiredMixin, FormView):
     form_class = DiaryForm
     template_name = 'diary/my_day.html'
     success_url = reverse_lazy('my_diary')
-    initial = {'date':date.today()}
+    initial = {'date': date.today()}
     pk_url_kwarg = "day"
 
     def form_valid(self, form):
         diary = form.save(commit=False)
         diary.user_id = self.request.user.pk
+        diary.language = self.request.user.language_learned
         diary.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
 class EditDay(NewDay, BaseUpdateView):
-    #not to change original date when unser is redacting day
+    # not to change original date when unser is redacting day
     initial = {}
-    
+
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk)
+        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)
 
 
 class MyDiary(LoginRequiredMixin, ListView):
     model = Diary
     template_name = 'diary/my_diary.html'
-    paginate_by = 20
+    paginate_by = 10
 
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk)
+        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)
 
 
 class ShowDay(LoginRequiredMixin, DetailView):
@@ -53,7 +54,7 @@ class ShowDay(LoginRequiredMixin, DetailView):
 
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk)
+        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)
 
 
 class DeleteDay(LoginRequiredMixin, DeleteView):
@@ -64,4 +65,4 @@ class DeleteDay(LoginRequiredMixin, DeleteView):
 
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk)
+        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)

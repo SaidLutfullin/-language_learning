@@ -1,8 +1,19 @@
 from django import forms
-from .models import Words
+from .models import Words, Language
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from loguru import logger
+
+
+class LanguageAdminForm(forms.ModelForm):
+    class Meta:
+        model = Language
+        fields = ('language_name', )
+
+        widgets = {
+            "language_name": forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
 
 class AddinWordForm(ModelForm):
     def __init__(self, *args, **kwargs):

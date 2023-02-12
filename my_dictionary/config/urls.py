@@ -11,12 +11,15 @@ urlpatterns = [
     path('', include('articles.urls')),
     path('', include('diary.urls')),
     path('', include('feedback.urls')),
+    path('', include('common.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-handler404 = "config.views.page_not_found_view"
+
+handler404 = "common.views.page_not_found_view"
+handler500 = "common.views.server_error"
 
 if not settings.DEBUG:
     urlpatterns += re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),

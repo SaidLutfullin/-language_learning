@@ -10,14 +10,17 @@ from django.urls import reverse_lazy
 from .forms import (RegisterUserForm, LoginUserForm, CustomUserChangeForm,
                     CustomPasswordChangeForm, CustomPasswordResetForm,
                     CustomSetPasswordForm)
-from .forms import User
+from .models import User
+from dictionary.models import Words
 from loguru import logger
 from django.shortcuts import get_object_or_404
 from dictionary.words_operation import get_dictionary_statistics
 from diary.models import Diary
 from django.contrib.auth.views import (PasswordChangeView, PasswordChangeDoneView, PasswordResetView,
-                                        PasswordResetConfirmView, PasswordResetCompleteView,
-                                        PasswordResetDoneView)
+                                       PasswordResetConfirmView, PasswordResetCompleteView,
+                                       PasswordResetDoneView)
+from django.db import connection
+
 
 class RegisterUser(LogoutRequiredMixin, CreateView):
     form_class = RegisterUserForm
@@ -55,6 +58,7 @@ class PasswordResetConfirm(LogoutRequiredMixin, PasswordResetConfirmView):
     template_name = "authentication/password_reset_confirm.html"
     form_class = CustomSetPasswordForm
 
+
 class PasswordResetComplete(LogoutRequiredMixin, PasswordResetCompleteView):
     template_name = "authentication/password_reset_complete.html"
 
@@ -72,9 +76,28 @@ class MyProfile(LoginRequiredMixin, TemplateView):
     @logger.catch
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        dictionary_statistics = get_dictionary_statistics(self.request.user.pk)
+        dictionary_statistics = get_dictionary_statistics(self.request.user)
         context.update(dictionary_statistics)
-        context['diary_entry_count'] = Diary.objects.filter(user_id=self.request.user.pk).count()
+        context['diary_entry_count'] = Diary.objects.filter(user_id=self.request.user.id,
+                                          language=self.request.user.language_learned).count()
+        
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT DISTINCT language_name
+                FROM diary_diary
+                JOIN dictionary_language ON dictionary_language.id = diary_diary.language_id
+                WHERE diary_diary.user_id = %s
+                UNION 
+                SELECT DISTINCT language_name
+                FROM dictionary_words
+                JOIN dictionary_language ON dictionary_language.id = dictionary_words.language_id
+                WHERE dictionary_words.user_id = %s 
+                """,
+                [self.request.user.id, self.request.user.id],
+                )
+            languages = [language[0] for language in cursor.fetchall()]
+            context['languages'] = languages
         return context
 
 

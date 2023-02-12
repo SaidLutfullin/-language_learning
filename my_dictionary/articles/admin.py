@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Article, Comment
-from .forms import ArticleAdminForm
+from .forms import ArticleAdminForm, CommentForm
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'is_published', 'is_main_page')
@@ -18,5 +18,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'article', 'created', 'active')
     list_filter = ('active', 'created')
     search_fields = ('name', 'email', 'text')
+    form = CommentForm
+
 
 admin.site.register(Comment, CommentAdmin)

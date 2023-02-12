@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'django.contrib.postgres',
+    'common.apps.CommonConfig',
     'dictionary.apps.DictionaryConfig',
     'authentication.apps.AuthenticationConfig',
     'articles.apps.ArticlesConfig',
@@ -164,6 +165,9 @@ CKEDITOR_5_CONFIGS = {
     },
     'extends': {
         'language': 'ru',
+
+
+        
         'blockToolbar': [
             'paragraph', 'heading1', 'heading2', 'heading3',
             '|',
@@ -172,7 +176,7 @@ CKEDITOR_5_CONFIGS = {
             'blockQuote',
         ],
         'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-        'subscript', 'superscript', 'highlight', '|','insertImage',
+        'subscript', 'superscript', 'highlight', 'sourceEditing','|','insertImage',
                     'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
                     'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
                     'insertTable',],
@@ -218,6 +222,9 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+
+
 
 
 INTERNAL_IPS = [

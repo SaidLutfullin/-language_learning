@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import (UserCreationForm, AuthenticationForm, UserChangeForm,
-                                    PasswordChangeForm, PasswordResetForm, SetPasswordForm)
+                                       PasswordChangeForm, PasswordResetForm, SetPasswordForm)
 from .models import User
 
 class RegisterUserForm(UserCreationForm):
@@ -37,7 +37,7 @@ class CustomUserChangeForm(UserChangeForm):
             "gender": forms.Select(attrs={'class': 'form-select'}),
             "username": forms.TextInput(attrs={'class': 'form-control'}),
             "email": forms.EmailInput(attrs={'class': 'form-control'}),
-            "language_learned": forms.TextInput(attrs={'class': 'form-control'}),
+            "language_learned": forms.Select(attrs={'class': 'form-control'}),
             "about_me": forms.Textarea(attrs={'class': 'form-control'}),
         }
 
@@ -62,7 +62,8 @@ class CustomPasswordResetForm(PasswordResetForm):
 class CustomSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label="New password",
-        widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "class": "form-control", "placeholder": "пароль1"}),
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password",
+                                          "class": "form-control", "placeholder": "пароль1"}),
         strip=False
     )
     new_password2 = forms.CharField(

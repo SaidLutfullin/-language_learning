@@ -13,7 +13,7 @@ class Article(models.Model):
     is_main_page = models.BooleanField(default=False, verbose_name='Главная страница?')
     is_published = models.BooleanField(default=False, verbose_name='Опублковать?')
     preview_photo = models.ImageField(upload_to="photos/%Y/%m/%d", verbose_name='Фото превью')
-
+    
     def __str__(self):
         return self.title
 
@@ -39,7 +39,7 @@ class Comment(models.Model):
     article = models.ForeignKey(Article, verbose_name='Статья', on_delete=models.CASCADE, related_name='comments')
     name = models.CharField(verbose_name='Имя', max_length=80)
     email = models.EmailField(verbose_name='E-mail', max_length=100)
-    text = models.CharField('Текст', max_length=1000)
+    text = models.CharField('Текст (максимальная длина комментария 1000 символов)', max_length=1000)
     created = models.DateTimeField(default=timezone.now, verbose_name='Оставлен')
     active = models.BooleanField(default=True, verbose_name='Активный')
 
