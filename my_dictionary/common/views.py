@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from .models import ServicePage
 from django.core.exceptions import ObjectDoesNotExist
@@ -6,9 +5,8 @@ from django.shortcuts import render
 from loguru import logger
 
 
-class ServicePageView(LoginRequiredMixin, TemplateView):
+class ServicePageView(TemplateView):
     model = ServicePage
-
     template_name = 'common/service_page.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -22,8 +20,17 @@ class ServicePageView(LoginRequiredMixin, TemplateView):
 
 
 def page_not_found_view(request, exception):
-    return render(request, 'common/404.html', status=404)
+    logger.error('page')
+    page = ServicePage.objects.filter(page_type='404').first()
+    return render(request,
+                  'common/service_page.html',
+                  status=404,
+                  context={'page': page})
 
 
 def server_error(request, *args, **kwargs):
-    return render(request, 'common/500.html', status=500)
+    page = ServicePage.objects.filter(page_type='500').first()
+    return render(request,
+                  'common/service_page.html',
+                  status=500,
+                  context={'page': page})

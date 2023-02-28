@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block styles %}
-<link type="text/css" href="{% static 'authentication/css/styles.css' %}" rel="stylesheet" />
-{% endblock %}
-
 {% block title%}
 Регистрация
 {% endblock %}
@@ -35,6 +31,14 @@
             {{ form.password2 }}
             <label>Повторите пароль</label>
           </div>
+            <p><label for="id_agreement">
+                Принимаю условия
+                <a href="{% url 'user_agreement'  %}">пользовательского соглашения</a>
+                и даю согласие на
+                <a href="{% url 'privacy_policy'  %}">обрбаботку персональных данных</a>
+                </label>
+                {{ form.agreement }}
+            </p>
           {% if form.errors %}
           <div class="checkbox mb-3 error-list">
               <label class="error-list">

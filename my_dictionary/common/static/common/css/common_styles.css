@@ -81,3 +81,19 @@ iframe {
 		height: 300px;
     }
 }
+
+.error-list ul li{
+	list-style-type: none;
+	color: #dc143c;
+}
+
+.error-list ul {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+@media screen and (max-width: 1000px) {
+    .table {
+      overflow-y: scroll;
+    }
+}

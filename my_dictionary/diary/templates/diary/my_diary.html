@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block styles %}
-<link type="text/css" href="{% static 'css/tables.css' %}" rel="stylesheet" />
-{% endblock %}
-
 {% block title%}
 Мой дневник
 {% endblock %}
@@ -15,7 +11,7 @@
         <div class="p-4 p-md-5 mb-4 rounded">
             <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">Мой дневник</h1>
-            <p class="lead my-3">Дневник помогает хранить всю информацию о вашем прогрессе в языке в одном месте. Он позволяет избежать беспорядка, который мы создаем заметками и листками бумаги.</p>
+            <p class="lead my-3">Учитесь излагать мысли и выводите слова в активный словарный запас. Отслеживайте прогресс и анализируйте ошибки. Выполняйте письменные задания и пишите конспекты.</p>
             <a class="btn btn-outline-warning rounded-pill non_underline" href="{% url 'new_day' %}">Добавить новый день</a>
             </div>
         </div>
@@ -26,13 +22,16 @@
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">Дневник</strong>
-            {% if p.title == '' %}
-            <h3 class="mb-0">{{ p.date|date:"d.m.Y" }}</h3>
-            {% else %}
-            <h3 class="mb-0">{{ p.title }}</h3>
-            {% endif %}
+            <h3 class="mb-0">
+                Дорогой дневник
+                {% if p.title %},
+                {{ p.title }}
+                {% endif %}
+            </h3>
             <div class="mb-1 text-muted">{{ p.date|date:"d.m.Y" }}</div>
-            <p class="card-text mb-auto">{{ p.text|safe|truncatewords_html:25}}</p>
+            {% autoescape off %}
+            <p class="card-text mb-auto">{{ p.text|striptags|truncatewords:25}}</p>
+            {% endautoescape %}
             <a href="my_diary/{{p.pk}}" class="stretched-link">Читать полностью</a>
             </div>
             <div class="col-auto d-none d-lg-block mt-4 me-4">
@@ -41,7 +40,7 @@
         </div>
         </div>
     {% endfor %}
-    {% include 'inc/_pagination.html' %}
+    {% include 'common/inc/_pagination.html' %}
     </div>
 </div>
 {% endblock %}

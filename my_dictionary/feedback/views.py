@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from loguru import logger
 from .services import send_email
 
+
 class ContactUs(FormView):
     form_class = ContactForm
     template_name = 'feedback/contact_us.html'
@@ -19,16 +20,15 @@ class ContactUs(FormView):
             if first_name:
                 full_name.append(first_name)
             if last_name:
-                full_name.append(last_name)    
+                full_name.append(last_name)
             full_name = ' '.join(full_name)
             if not full_name:
                 full_name = self.request.user.username
 
             email = self.request.user.email
-            #user_id = self.request.user.id
             return {
-                'name':full_name,
-                'email':email
+                'name': full_name,
+                'email': email
             }
 
     def form_valid(self, form):
@@ -41,4 +41,3 @@ class ContactUs(FormView):
             logger.error(ex)
             messages.error(self.request, 'Сообщение не отправлено')
             return self.render_to_response(self.get_context_data(form=form))
-        

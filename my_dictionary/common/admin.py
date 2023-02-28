@@ -9,4 +9,5 @@ class ServicePageAdmin(admin.ModelAdmin):
     search_fields = ('page_type', )
     form = ServicePageAdminForm
 
+
 admin.site.register(ServicePage, ServicePageAdmin)

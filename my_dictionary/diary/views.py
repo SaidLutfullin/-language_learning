@@ -3,7 +3,6 @@ from .models import Diary
 from .forms import DiaryForm
 from loguru import logger
 from django.views.generic import ListView, FormView, DetailView, DeleteView
-from datetime import datetime
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -33,7 +32,13 @@ class EditDay(NewDay, BaseUpdateView):
 
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)
+        return Diary.objects.filter(user_id=self.request.user.pk,
+                                    language=self.request.user.language_learned)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = True
+        return context
 
 
 class MyDiary(LoginRequiredMixin, ListView):
@@ -43,7 +48,8 @@ class MyDiary(LoginRequiredMixin, ListView):
 
     @logger.catch
     def get_queryset(self):
-        return Diary.objects.filter(user_id=self.request.user.pk, language=self.request.user.language_learned)
+        return Diary.objects.filter(user_id=self.request.user.pk,
+                                    language=self.request.user.language_learned)
 
 
 class ShowDay(LoginRequiredMixin, DetailView):

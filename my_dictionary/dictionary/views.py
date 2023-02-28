@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, UpdateView, FormView
 from .models import Words
+from common.models import ServicePage
 from .forms import AddinWordForm, AskingForm, EditingForm, Exporting
 from .words_operation import (TestItem, get_words_list,
                               get_dictionary_statistics, export_words)
@@ -47,7 +48,7 @@ class EditWord(LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        
+
         if 'delete' in self.request.POST:
             self.object.delete()
             return HttpResponseRedirect(self.get_success_url())
@@ -67,9 +68,12 @@ class EditWord(LoginRequiredMixin, UpdateView):
 
         if 'save' in self.request.POST:
             if form.cleaned_data['from_scratch']:
-                word.save(update_fields=["russian_word", "foreign_word", "context", "asking_date"])
+                word.save(update_fields=["russian_word", "foreign_word",
+                                         "context", "asking_date"])
             else:
-                word.save(update_fields=["russian_word", "foreign_word", "context"])
+                word.save(update_fields=["russian_word",
+                                         "foreign_word",
+                                         "context"])
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -92,7 +96,7 @@ class Dictionary(LoginRequiredMixin, ListView):
 
         search_query = self.request.GET.get("search-quesry")
         if search_query is not None and search_query != "":
-            context['search_query'] = self.request.GET.get("search-quesry")
+            context['search_query'] = search_query
         return context
 
 
@@ -104,7 +108,9 @@ def test(request):
     if request.method == 'POST' and form.is_valid():
         word = TestItem(request.user)
         word.set_question(request.session.get('word'))
-        word.send_users_answer(form.cleaned_data['answer'], request.session.get('help'), '<i><u>','</i></u>')
+        word.send_users_answer(form.cleaned_data['answer'],
+                               request.session.get('help'),
+                               '<i><u>', '</i></u>')
         if word.is_users_answer_correct():
             data = {
                 'read_aloud': word.get_question()['read_aloud'],
@@ -137,7 +143,10 @@ def test(request):
                 'read_aloud': '',
             }
         else:
-            return render(request, 'dictionary/success_text_page.html')
+            page = ServicePage.objects.filter(page_type='test_completed').first()
+            return render(request,
+                          'common/service_page.html',
+                          context={'page': page})
     return render(request, 'dictionary/test.html', data)
 
 
@@ -161,7 +170,11 @@ def cards(request):
             'russian_word': word.get_question()['russian_word']
         }
     else:
-        return render(request, 'dictionary/success_text_page.html')
+        page = ServicePage.objects.filter(page_type='test_completed').first()
+        return render(request,
+                      'common/service_page.html',
+                      context={'page': page})
+
     return render(request, 'dictionary/cards.html', data)
 
 

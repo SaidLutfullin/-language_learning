@@ -2,17 +2,12 @@
 {% load static %}
 
 
-
-
 {% block styles %}
 <link type="text/css" href="{% static 'articles/css/styles.css' %}" rel="stylesheet" />
-<link type="text/css" href="{% static 'css/tables.css' %}" rel="stylesheet" />
-<link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
+<link type="text/css" href="{% static 'common/css/tables.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
-<script src="{% static 'django_ckeditor_5/dist/translations/ru.js' %}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 {% endblock %}
 
@@ -22,24 +17,57 @@
 {% endblock %}
 
 {% block body%}
+
 <div class="container mt-5">
     <h1>{{ article.title }}</h1>
     <p>Дата: {{ article.date|date:"d.m.Y" }}</p>
     <p><img class="article" src="{{ article.preview_photo.url }}"></p>
     {% autoescape off %}
-    {{article.text|linebreaks}}
+    {{article.text}}
     {% endautoescape %}
 </div>
 
-<div class="container mt-5">
-    <div class="container" id="comment">
+<div class="container mt-5"  id="my-comment">
+    <div class="container">
         <h3>Оставить коммментарий</h3>
-        <p><small>Ваш e-mail не будет опубликован</small></p>
-
-        <div class="ck-content container">
-        <form method = "POST" action="#comment">
+        <div class="container">
+        <form method = "POST" action="#my-comment">
             {% csrf_token %}
-            {{form.as_p }}
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        {{ form.name }}
+                        <label for="username">Имя</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        {{ form.email }}
+                        <label for="username">E-mail (не будет опубликован)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.media }}
+                {{ form.text }}
+            </div>
+            <p><label for="id_agreement">
+                Принимаю условия
+                <a href="{% url 'user_agreement'  %}">пользовательского соглашения</a>
+                и даю согласие на
+                <a href="{% url 'privacy_policy'  %}">обрбаботку персональных данных</a>
+                </label> {{ form.agreement }}
+            </p>
+            {% if form.errors %}
+              <div class="checkbox mb-3 error-list">
+                  <label class="error-list">
+                    {% for field in form %}
+                        {{ field.errors }}
+                    {% endfor %}
+                  {{form.non_field_errors}}
+                </label>
+              </div>
+            {% endif %}
             <p>
             <button type="submit" class="btn btn-outline-primary">Отправить комментарий</button>
             </p>
@@ -48,7 +76,7 @@
 
     </div>
     
-    <div class="container">
+    <div class="container" id="comments">
         {% with comments.count as total_comments %}
             <h2>
             Комментариев: {{ total_comments }} 

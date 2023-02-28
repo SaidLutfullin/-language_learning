@@ -19,7 +19,7 @@ class User(AbstractUser):
     about_me = models.TextField(blank=True)
     language_learned = models.ForeignKey('dictionary.language',
                                          on_delete=models.PROTECT, default=1)
-    
+
     def __str__(self):
         return self.username
 

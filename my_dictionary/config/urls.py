@@ -5,6 +5,7 @@ from django.views.static import serve
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('tinymce/', include('tinymce.urls')),
     path('admin/', admin.site.urls),
     path('', include('authentication.urls')),
     path('', include('dictionary.urls')),
@@ -13,9 +14,8 @@ urlpatterns = [
     path('', include('feedback.urls')),
     path('', include('common.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
-    path("ckeditor5/", include('django_ckeditor_5.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
 handler404 = "common.views.page_not_found_view"

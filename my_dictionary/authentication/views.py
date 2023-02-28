@@ -11,7 +11,6 @@ from .forms import (RegisterUserForm, LoginUserForm, CustomUserChangeForm,
                     CustomPasswordChangeForm, CustomPasswordResetForm,
                     CustomSetPasswordForm)
 from .models import User
-from dictionary.models import Words
 from loguru import logger
 from django.shortcuts import get_object_or_404
 from dictionary.words_operation import get_dictionary_statistics
@@ -20,6 +19,7 @@ from django.contrib.auth.views import (PasswordChangeView, PasswordChangeDoneVie
                                        PasswordResetConfirmView, PasswordResetCompleteView,
                                        PasswordResetDoneView)
 from django.db import connection
+from common.mixins.service_page_mixin import ServicePageMixin
 
 
 class RegisterUser(LogoutRequiredMixin, CreateView):
@@ -39,8 +39,9 @@ class ChangePassword(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
 
 
-class ChangePasswordDone(LoginRequiredMixin, PasswordChangeDoneView):
-    template_name = "authentication/password_change_done.html"
+# changing password for authorized user
+class ChangePasswordDone(LoginRequiredMixin, ServicePageMixin, PasswordChangeDoneView):
+    page_type = 'password_change_done'
 
 
 class ResetPassword(LogoutRequiredMixin, PasswordResetView):
@@ -49,8 +50,8 @@ class ResetPassword(LogoutRequiredMixin, PasswordResetView):
     form_class = CustomPasswordResetForm
 
 
-class PasswordResetDone(LogoutRequiredMixin, PasswordResetDoneView):
-    template_name = "authentication/password_reset_done.html"
+class PasswordResetDone(LogoutRequiredMixin, ServicePageMixin, PasswordResetDoneView):
+    page_type = 'password_reset_done'
 
 
 class PasswordResetConfirm(LogoutRequiredMixin, PasswordResetConfirmView):
@@ -59,8 +60,8 @@ class PasswordResetConfirm(LogoutRequiredMixin, PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
 
 
-class PasswordResetComplete(LogoutRequiredMixin, PasswordResetCompleteView):
-    template_name = "authentication/password_reset_complete.html"
+class PasswordResetComplete(LogoutRequiredMixin, ServicePageMixin, PasswordResetCompleteView):
+    page_type = 'password_reset_complete'
 
 
 @logger.catch
@@ -79,8 +80,8 @@ class MyProfile(LoginRequiredMixin, TemplateView):
         dictionary_statistics = get_dictionary_statistics(self.request.user)
         context.update(dictionary_statistics)
         context['diary_entry_count'] = Diary.objects.filter(user_id=self.request.user.id,
-                                          language=self.request.user.language_learned).count()
-        
+                                                            language=self.request.user.language_learned).count()
+
         with connection.cursor() as cursor:
             cursor.execute(
                 """
@@ -88,11 +89,11 @@ class MyProfile(LoginRequiredMixin, TemplateView):
                 FROM diary_diary
                 JOIN dictionary_language ON dictionary_language.id = diary_diary.language_id
                 WHERE diary_diary.user_id = %s
-                UNION 
+                UNION
                 SELECT DISTINCT language_name
                 FROM dictionary_words
                 JOIN dictionary_language ON dictionary_language.id = dictionary_words.language_id
-                WHERE dictionary_words.user_id = %s 
+                WHERE dictionary_words.user_id = %s
                 """,
                 [self.request.user.id, self.request.user.id],
                 )

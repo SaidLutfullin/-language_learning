@@ -33,7 +33,7 @@
             <div class="mb-1 text-muted">{{article.date|date:"d-m-Y"}}</div>
             <p class="mb-auto">
                 {% autoescape off %}
-                {{article.text|linebreaks|truncatewords:20}}
+                {{article.text|striptags|truncatewords:25}}
                 {% endautoescape %}
             </p>
             <a href="{% url 'show_article' article.slug %}" class="stretched-link">Продолжить чтение...</a>
@@ -43,6 +43,6 @@
         </div>
     </div>
     {% endfor %}
-    {% include 'inc/_pagination.html' %}
+    {% include 'common/inc/_pagination.html' %}
 </div>
 {% endblock %}

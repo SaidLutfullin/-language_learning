@@ -13,8 +13,3 @@ table td, table th {
 }
 
 
-@media screen and (max-width: 1000px) {
-    .table {
-      overflow-y: scroll;
-    }
-}

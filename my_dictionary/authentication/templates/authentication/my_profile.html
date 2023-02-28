@@ -16,7 +16,7 @@
                             {% if request.user.avatar %}
                             <img src="{{request.user.avatar.url}}" alt="Admin" class="rounded-circle" width="150">
                             {% else %}
-                            <img src="{% static '/images/anonymous.png' %}" alt="Admin" class="rounded-circle" width="150">
+                            <img src="{% static 'common/images/anonymous.png' %}" alt="Admin" class="rounded-circle" width="150">
                             {% endif %}
                             <div class="mt-3">
                                 <h4>{{request.user.first_name}} {{request.user.last_name}}</h4>

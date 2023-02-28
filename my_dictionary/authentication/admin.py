@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User
 from django.contrib import admin
 
+
 class UsersAdmin(UserAdmin):
     add_form = RegisterUserForm
     form = CustomUserChangeForm
@@ -32,5 +33,6 @@ class UsersAdmin(UserAdmin):
             if f in form.base_fields:
                 form.base_fields[f].disabled = True
         return form
+
 
 admin.site.register(User, UsersAdmin)

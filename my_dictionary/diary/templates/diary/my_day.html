@@ -2,25 +2,20 @@
 {% load static %}
 
 {% block title%}
-Мой дневник
-{% endblock %}
-
-{% block styles %}
-<link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
-<script src="{% static 'django_ckeditor_5/dist/translations/ru.js' %}"></script>
+Дорогой дневник...
 {% endblock %}
 
 {% block body%}
-<div class="ck-content container mt-5">
+<div class="container mt-5">
+    <h1>Дорогой дневник...</h1>
     <form method="post">
     {% csrf_token %}
+    {{ form.media }}
     {{ form.as_p }}
     <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+    {% if editing %}
     <a href="delete" class="btn btn-outline-danger non_underline">Удалить</a>
+    {% endif %}
     </form>
 </div>
 {% endblock%}

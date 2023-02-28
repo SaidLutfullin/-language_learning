@@ -2,20 +2,19 @@ from pathlib import Path
 from loguru import logger
 from django.contrib.messages import constants as messages
 from .config_file import (API_KEY, DB_NAME, DB_USER, ALLOWED_HOSTS,
-                        DB_PASSWORD, EMAIL_HOST,
-                        EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
-                        EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL,
-                        DEFAULT_FROM_EMAIL, DEBUG)
+                          DB_PASSWORD, EMAIL_HOST,
+                          EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
+                          EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL,
+                          DEFAULT_FROM_EMAIL, DEBUG, INTERNAL_IPS)
 
-
-logger.add('logs.json', format='{time} {level} {message}', level='ERROR', rotation="500 MB",
-            compression="zip", serialize=True)
-
+logger.add('logs.json', format='{time} {level} {message}', level='ERROR',
+           rotation="500 MB",
+           compression="zip", serialize=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = API_KEY
 DEBUG = DEBUG
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ALLOWED_HOSTS
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,14 +31,12 @@ INSTALLED_APPS = [
     'articles.apps.ArticlesConfig',
     'feedback.apps.FeedbackConfig',
     'diary.apps.DiaryConfig',
-    'django_ckeditor_5',
-    'django_cleanup'
-    
+    'django_cleanup',
+    'tinymce',
 ]
 
 
 MIDDLEWARE = [
-
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,7 +45,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -127,7 +123,7 @@ EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_USE_SSL = EMAIL_USE_SSL
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
-DEFAULT_FROM_EMAIL =  DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 customColorPalette = [
         {
@@ -157,79 +153,7 @@ customColorPalette = [
     ]
 
 
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'language': 'ru',
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                    'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
-    },
-    'extends': {
-        'language': 'ru',
-
-
-        
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote',
-        ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-        'subscript', 'superscript', 'highlight', 'sourceEditing','|','insertImage',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable',],
-        'image': {
-            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
-            'styles': [
-                'full',
-                'side',
-                'alignLeft',
-                'alignRight',
-                'alignCenter',
-            ]
-
-        },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            }
-        },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' },
-                { 'model': 'heading4', 'view': 'h4', 'title': 'Heading 4', 'class': 'ck-heading_heading4' }
-            ]
-        }
-    },
-    'list': {
-        'properties': {
-            'styles': 'true',
-            'startIndex': 'true',
-            'reversed': 'true',
-        }
-    }
-}
-
-
-
-
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+INTERNAL_IPS = INTERNAL_IPS
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -237,4 +161,42 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
+}
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "400px",
+    "width": "100%",
+    "menubar": "file edit view insert format tools table",
+    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
+    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
+    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
+    "a11ycheck ltr rtl | showcomments addcomment code",
+    "custom_undo_redo_levels": 10,
+    "language": "ru",  # To force a specific language instead of the Django current language.
+    "file_picker_callback": """function (cb, value, meta) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "file");
+        if (meta.filetype == "image") {
+            input.setAttribute("accept", "image/*");
+        }
+
+        input.onchange = function () {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                var id = "blobid" + (new Date()).getTime();
+                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                var base64 = reader.result.split(",")[1];
+                var blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+                cb(blobInfo.blobUri(), { title: file.name });
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }""",
 }

@@ -32,7 +32,8 @@ class Corrector():
                             d[(i-1, j-1)] + cost,  # substitution
                             )
                 if i and j and s1[i] == s2[j-1] and s1[i-1] == s2[j]:
-                    d[(i, j)] = min(d[(i, j)], d[i-2, j-2] + cost)  # transposition
+                    # transposition
+                    d[(i, j)] = min(d[(i, j)], d[i-2, j-2] + cost)
         return d[lenstr1-1, lenstr2-1]
 
     def __mark_difference(self, users_str, correct_str, start_mark, end_mark):
@@ -48,7 +49,7 @@ class Corrector():
             if users_str[c] != correct_str[c]:
                 index_1 = c
                 break
-            elif c==len(users_str)-1:
+            elif c == len(users_str)-1:
                 # when users string is over, but discrepancy has not found
                 # means that the inded of the next symbol is discrepancy
                 index_1 = c+1
@@ -65,9 +66,9 @@ class Corrector():
             if users_str[i] != correct_str[i]:
                 index_2 = len(correct_str)+i
                 break
-            elif len(users_str)==-i:
+            elif len(users_str) == -i:
                 # previous index is end of discrepancy
-                index_2=len(correct_str)+i+1
+                index_2 = len(correct_str)+i+1
                 break
         else:
             ltn = True
@@ -76,52 +77,54 @@ class Corrector():
         end_index = max(index_1, index_2)
 
         if ltn and (end_index == 1):
-            #aassasin-assasin
-            #|id|0123456|
-            #|cr|assasin|
-            #|fs|a      |
-            #|fe|assasin|
-            #|po|*      |
-            end_index=0
+            # aassasin-assasin
+            # |id|0123456|
+            # |cr|assasin|
+            # |fs|a      |
+            # |fe|assasin|
+            # |po|*      |
+            end_index = 0
         elif ltn and (end_index == 2):
-            #qqqwerty-qqwerty
-            #|id|0123456|
-            #|cr|qqwerty|
-            #|fs|qq     |
-            #|fe|qqwerty|
-            #|po|**     |
-            end_index=1
+            # qqqwerty-qqwerty
+            # |id|0123456|
+            # |cr|qqwerty|
+            # |fs|qq     |
+            # |fe|qqwerty|
+            # |po|**     |
+            end_index = 1
         elif mte and (start_index == len(correct_str)-2):
-            #qwertyy-qwerty
-            #|id|012345|
-            #|cr|qwerty|
-            #|fs|qwerty|
-            #|fe|     y|
-            #|po|     *|
-            start_index=len(correct_str)-1
+            # qwertyy-qwerty
+            # |id|012345|
+            # |cr|qwerty|
+            # |fs|qwerty|
+            # |fe|     y|
+            # |po|     *|
+            start_index = len(correct_str)-1
         elif mte and (start_index == len(correct_str)-3):
-            #qwertyyy-qwertyy
-            #|id|0123456|
-            #|cr|qwertyy|
-            #|fs|qwertyy|
-            #|fe|     yy|
-            #|po|     **|
-            start_index=len(correct_str)-2
-        elif(start_index != end_index) and (start_index+1 != end_index):
-                start_index += 1
-                end_index -= 1
+            # qwertyyy-qwertyy
+            # |id|0123456|
+            # |cr|qwertyy|
+            # |fs|qwertyy|
+            # |fe|     yy|
+            # |po|     **|
+            start_index = len(correct_str)-2
+        elif (start_index != end_index) and (start_index+1 != end_index):
+            start_index += 1
+            end_index -= 1
         marked_string = correct_str[:start_index] + start_mark + correct_str[start_index:end_index+1] + end_mark + correct_str[end_index+1:]
         return marked_string
 
     def check_answer(self, users_str, correct_str, start_mark, end_mark):
         if users_str == correct_str:
             return 1
-        elif len(correct_str)<4:
+        elif len(correct_str) < 4:
             return 0
         else:
-            levenshtein_distance = self.__levenshtein_distance(users_str, correct_str)
+            levenshtein_distance = self.__levenshtein_distance(users_str,
+                                                               correct_str)
             if levenshtein_distance == 1:
-                return self.__mark_difference(users_str, correct_str, start_mark, end_mark)
+                return self.__mark_difference(users_str, correct_str,
+                                              start_mark, end_mark)
             else:
                 return 0
 
@@ -173,7 +176,7 @@ class TestItem:
         # typo, registr (in some languages it does matter), translit etc
         corector = Corrector()
         corection_result = corector.check_answer(self.user_answer, self._question['answer'], starc_mark, end_mark)
-        
+
         if corection_result == 0:
             return False
         else:
@@ -225,7 +228,7 @@ class TestItem:
             word = ""
             logger.error(f'Method get_word. Error {str(error)}')
         finally:
-            return word    
+            return word
 
     def _get_revise_date(self, box_number):
         today_date = date.today()

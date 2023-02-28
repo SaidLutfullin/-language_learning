@@ -88,7 +88,7 @@
                 <div class="input-group has-validation">
                     <span class="input-group-text">🔎</span>
                     <input type="text" id="site-search" name="search-quesry" class="form-control" placeholder="Поиск" aria-label="Search" value="{{search_query}}">
-                    <button type="button" id="site-search-reset" class="input-group-text btn btn-lg btn-outline-secondary">X</button>
+                    <a href="{% url 'dictionary' %}" class="non_underline input-group-text btn btn-lg btn-outline-secondary">X</a>
                   </div>
                 <div class="px-2">
                     <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Поиск</button>
@@ -119,7 +119,7 @@
             {% endfor %}
             </tbody>
         </table>
-        {% include 'inc/_pagination.html' %}
+        {% include 'common/inc/_pagination.html' %}
     </div>
     </div>
 </div>
