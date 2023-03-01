@@ -2,7 +2,7 @@ from pathlib import Path
 from loguru import logger
 from django.contrib.messages import constants as messages
 from .config_file import (API_KEY, DB_NAME, DB_USER, ALLOWED_HOSTS,
-                          DB_PASSWORD, EMAIL_HOST,
+                          DB_PASSWORD, EMAIL_HOST, DB_ENGINE,
                           EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
                           EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL,
                           DEFAULT_FROM_EMAIL, DEBUG, INTERNAL_IPS)
@@ -72,7 +72,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': DB_ENGINE,
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
