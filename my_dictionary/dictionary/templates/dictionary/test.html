@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block body%}
-<main class="container">s
+<main class="container">
     <div class="bg-light p-5 rounded">
         <h1>Письменный опрос</h1>
         <div class="my-5">
@@ -31,8 +31,8 @@
                 <div class="alert alert-warning">
                     <h2>Верно!</h2>
                     <h4 class="card-text">{{russian_word}} - {{answer}}</h4>
-                    <h2>Прочитай вслух:</h2> 
-                    <h4>{{ read_aloud|safe }}</h4>
+                    <p>Прочитай вслух:</p>
+                    <p>{{ read_aloud|safe }}</p>
                     <p><a id="read_aloud" href="{% url 'test' %}" class="btn btn-outline-success non_underline">Окей</a></p>
                 </div>
             {% endif %} 

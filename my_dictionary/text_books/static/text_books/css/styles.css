@@ -1,0 +1,26 @@
+.text-book-block {
+    height: 100vh;
+
+}
+
+.pdf-container {
+    overflow: auto;
+    height: 80%;
+    width: 100%!important;
+}
+
+.half-block {
+    height: 50%;
+}
+
+.full-block {
+    height: 100%;
+}
+
+.hiden {
+    display: none;
+}
+
+.inp-w {
+    width: 100px;
+}

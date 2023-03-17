@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from .models import Diary
 from .forms import DiaryForm
 from loguru import logger

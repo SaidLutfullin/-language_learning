@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'articles.apps.ArticlesConfig',
     'feedback.apps.FeedbackConfig',
     'diary.apps.DiaryConfig',
+    'text_books.apps.TextBooksConfig',
     'django_cleanup',
     'tinymce',
 ]
@@ -165,7 +166,7 @@ MESSAGE_TAGS = {
 
 
 TINYMCE_DEFAULT_CONFIG = {
-    "height": "400px",
+    "height": "500px",
     "width": "100%",
     "menubar": "file edit view insert format tools table",
     "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "

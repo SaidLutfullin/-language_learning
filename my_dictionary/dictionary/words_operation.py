@@ -162,20 +162,20 @@ class TestItem:
     def get_question(self):
         return self._question
 
-    def send_users_answer(self, user_answer, help, starc_mark, end_mark):
+    def send_users_answer(self, user_answer, help, start_mark, end_mark):
         self.help = help
         self.user_answer = user_answer
-        self._is_users_answer_correct = self._check_answer(starc_mark, end_mark)
+        self._is_users_answer_correct = self._check_answer(start_mark, end_mark)
 
     def is_users_answer_correct(self):
         return self._is_users_answer_correct
 
     @logger.catch
-    def _check_answer(self, starc_mark, end_mark):
+    def _check_answer(self, start_mark, end_mark):
         # seems stupid, but in prospect here will be more smart algoritm taking into account
         # typo, registr (in some languages it does matter), translit etc
         corector = Corrector()
-        corection_result = corector.check_answer(self.user_answer, self._question['answer'], starc_mark, end_mark)
+        corection_result = corector.check_answer(self.user_answer, self._question['answer'], start_mark, end_mark)
 
         if corection_result == 0:
             return False

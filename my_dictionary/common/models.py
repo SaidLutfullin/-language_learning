@@ -1,7 +1,6 @@
 from django.db import models
 from tinymce.models import HTMLField
 
-
 class ServicePage(models.Model):
     SERVICE_PAGE_TYPES = [
         ('user_agreement', 'Пользовательское соглашение'),

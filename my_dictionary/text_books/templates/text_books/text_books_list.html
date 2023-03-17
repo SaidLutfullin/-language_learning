@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Мои курсбуки
+{% endblock %}
+
+{% block body%}
+<div class="container mt-5 ">
+    <div class="container rounded mt-5 text-bg-dark">
+        <div class="p-4 p-md-5 mb-4 rounded">
+            <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Мои учебники</h1>
+            <p class="lead my-3">Добавляйте учебники и выполняйте задания.</p>
+            <a class="btn btn-outline-warning rounded-pill non_underline" href="{% url 'add_text_book' %}">Добавить новый учебник</a>
+            </div>
+        </div>
+    </div>
+    {% for text_book in text_books %}
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" height="850">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Учебники</strong>
+            <h3 class="mb-0">{{ text_book.name }}</h3>
+            <p class="mb-auto">
+                {{ text_book.description }}
+            </p>
+            <a href="{% url 'show_text_book' text_book_id=text_book.id %}" class="stretched-link">Открыть учебник</a>
+        </div>
+        <div class="col-auto d-none d-lg-block m-4">
+            <img class="img-article-left" src="{{ text_book.preview_image.url }}">
+        </div>
+    </div>
+    {% endfor %}
+    {% if not text_books %}
+        <h2>Вы еще не добавили ни одного учебника</h2>
+    {% endif %}
+    {% include 'common/inc/_pagination.html' %}
+</div>
+{% endblock %}

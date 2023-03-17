@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title%}
+{% if object %}
+Редактировать учебник {{ object.name }}
+{% else %}
+Добавить учебник
+{% endif %}
+{% endblock %}
+
+{% block body%}
+<main class="container">
+    <div class="bg-light p-5 rounded">
+        <div class="container">
+            {% if object %}
+            <h1>Редактировать учебник {{ object.name }}</h1>
+            {% else %}
+            <h1>Добавить учебник</h1>
+            {% endif %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <p>Если ключи не в отдельном файле, а в самом учебнике, то не загружайте файл с ключами.</p>
+                    <button type="submit" class="btn btn-outline-success">Сохранить</button>
+                    {% if object %}
+                    <a href="{% url 'delete_text_book' text_book_id=object.id %}" class="btn btn-outline-danger non_underline">Удалить учебник</a>
+                    {% endif %}
+                </form>
+        </div>
+    </div>
+</main>
+{% endblock  %}

@@ -26,6 +26,7 @@
           {% if request.user.is_authenticated %}
           <li><a href="{% url 'dictionary' %}" class="px-2 menu-item">Мой словарь</a></li>
           <li><a href="{% url 'my_diary' %}" class="px-2 menu-item">Мой дневник</a></li>
+          <li><a href="{% url 'my_text_books' %}" class="px-2 menu-item">Мои учебники</a></li>
           {% endif %}
           <li><a href="{% url 'contact_us' %}" class="px-2 menu-item">Контакты</a></li>
         </ul>
@@ -45,6 +46,7 @@
             <li><a class="dropdown-item non_underline" href="{% url 'my_profile' %}">Мой профиль</a></li>
             <li><a class="dropdown-item non_underline" href="{% url 'dictionary' %}">Мой словарь</a></li>
             <li><a class="dropdown-item non_underline" href="{% url 'my_diary' %}">Мой дневник</a></li>
+            <li><a class="dropdown-item non_underline" href="{% url 'my_text_books' %}" class="nav-link px-2 text-muted">Мои учебники</a></li>
               {% if request.user.is_staff %}
                   <li><a class="dropdown-item non_underline" href="/admin">Админ панель</a></li>
               {% endif %}
@@ -70,6 +72,7 @@
             {% if request.user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'dictionary' %}" class="nav-link px-2 text-muted">Мой словарь</a></li>
             <li class="nav-item"><a href="{% url 'my_diary' %}" class="nav-link px-2 text-muted">Мой дневник</a></li>
+            <li class="nav-item"><a href="{% url 'my_text_books' %}" class="nav-link px-2 text-muted">Мои учебники</a></li>
             {% endif %}
             <li class="nav-item"><a href="{% url 'user_agreement' %}" class="nav-link px-2 text-muted">Пользовательское соглашение</a></li>
             <li class="nav-item"><a href="{% url 'privacy_policy' %}" class="nav-link px-2 text-muted">Политика конфиденциальности</a></li>

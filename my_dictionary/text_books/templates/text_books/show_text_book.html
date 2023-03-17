@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link type="text/css" href="{% static 'text_books/css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="{% static 'text_books/js/pdf_js/build/pdf.js' %}"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = '{% static 'text_books/js/pdf_js/build/pdf.worker.js' %}';
+</script>
+<script src="{% static 'text_books/js/pdf_manager.js' %}"></script>
+{% endblock %}
+
+{% block title%}
+{{ text_book.name }}
+{% endblock %}
+
+{% block body%}
+
+<div class="container-fluid"  id="my-comment">
+<input id="textBookUrl" type="hidden" value="{{ text_book.book_file.url }}">
+<input id="keysBookUrl" type="hidden" value="{{ keys_book_url }}">
+    <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1">
+        <div class="col text-book-block">
+            <div id="text-book-block" class="full-block">
+                <div class="d-flex flex-wrap mb-1 justify-content-center">
+                    <div class="d-flex my-1">
+                        <label for="scale" class="rounded-0 input-group-text">Масштаб: </label>
+                        <input class="form-control rounded-0 inp-w"
+                               id="scale"
+                               type="number"
+                               min="0"
+                               value="100"
+                               step="5">
+                        <span class="rounded-0 input-group-text me-4">%</span>
+                    </div>
+                    <button class="btn btn-outline-primary mx-1 my-1" id="showKeys">Показать ключи</button>
+                    <div class="d-flex my-1">
+                        <button class="btn btn-outline-primary mx-1" id="goBackButton">&lsaquo;</button>
+                        <input class="form-control inp-w mx-1"
+                               id="pageNumberInput"
+                               type="number"
+                               min="1"
+                               value="{{ text_book.current_page_number }}">
+                        <button class="btn btn-outline-primary mx-1" id="goButton">go</button>
+                        <button class="btn btn-outline-primary mx-1" id="goForwardButton">&rsaquo;</button>
+                    </div>
+                </div>
+                <div id="pdf-container" class="pdf-container border">
+                    <canvas id="pdf-canvas"></canvas>
+                </div>
+            </div>
+            <div id="keys-block" class="hiden">
+                <div class="d-flex flex-wrap mb-1 justify-content-center">
+                    <div class="d-flex my-1">
+                        <label for="keys-scale" class="rounded-0 input-group-text">Масштаб: </label>
+                        <input class="form-control rounded-0 inp-w"
+                               id="keys-scale"
+                               type="number"
+                               value="100"
+                               min="0"
+                               step="5">
+                        <span class="rounded-0 input-group-text me-4">%</span>
+                    </div>
+                    <button class="btn btn-outline-primary mx-1 my-1" id="hideKeys">Скрыть ключи</button>
+                    <button class="btn btn-outline-primary mx-1 my-1" id="splitKeys">split</button>
+                    <div class="d-flex my-1">
+                        <button class="btn btn-outline-primary mx-1" id="keysGoBackButton">&lsaquo;</button>
+                        <input class="form-control inp-w mx-1"
+                               id="keysPageNumberInput"
+                               type="number"
+                               value="{{ text_book.keys_page_number }}">
+                        <button class="btn btn-outline-primary mx-1" id="keysGoButton">go</button>
+                        <button class="btn btn-outline-primary mx-1" id="keysGoForwardButton">&rsaquo;</button>
+                    </div>
+                </div>
+                <div id="pdf-container" class="pdf-container border">
+                    <canvas id="keys-pdf-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h1>{{ text_book.name }}</h1>
+            {% if form %}
+                <a href="{{ text_book.get_absolute_url }}" class="btn btn-outline-primary mb-2 non_underline">Назад к списку упражнений</a>
+                <form method="post" id="exerciseForm">
+                    {% csrf_token %}
+                    {{ form.media }}
+
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            {{ form.title.label_tag }}{{ form.title }}
+                            {{ form.title.errors }}
+                        </div>
+                        <div class="col-3">
+                            {{ form.date.label_tag }}{{ form.date }}
+                            {{ form.date.errors }}
+                        </div>
+                    </div>
+                    {{ form.text.errors }}
+                    {{ form.text }}
+                    {{ form.page_number }}
+                    {{ form.keys_page_number }}
+                    <button type="button" id="saveExercise" class="btn btn-outline-primary mt-2">Сохранить</button>
+                    {% if object %}
+                    <a href="{% url 'delete_exercise' exercise_id=object.id %}" class="btn btn-outline-danger non_underline mt-2">Удалить упражнение</a>
+                    {% endif %}
+                </form>
+            {% else %}
+                <a href="{% url 'add_exercise' text_book_id=text_book.id %}" class="btn btn-outline-primary mb-2 non_underline">Добавить упражнение</a>
+                <a href="{% url 'edit_text_book' text_book_id=text_book.id %}" class="btn btn-outline-primary mb-2 non_underline">Редактировать учебник</a>
+                {% for exercise in exercises %}
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" height="850">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary">Упражнение</strong>
+                        <h3 class="mb-0">{{ exercise.title }}</h3>
+                        <p class="mb-auto">
+                            {% autoescape off %}
+                            {{ exercise.text|truncatewords_html:50 }}
+                            {% endautoescape %}
+                        </p>
+                        <a href="{% url 'update_exercise' exercise_id=exercise.id %}" class="stretched-link">Открыть упражнение</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not exercises %}
+                    <h2>Вы еще не выполнили ни одного задания</h2>
+                {% endif %}
+                {% include 'common/inc/_pagination.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
