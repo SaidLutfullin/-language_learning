@@ -2,12 +2,12 @@ from pathlib import Path
 from loguru import logger
 from django.contrib.messages import constants as messages
 from .config_file import (API_KEY, DB_NAME, DB_USER, ALLOWED_HOSTS,
-                          DB_PASSWORD, EMAIL_HOST, DB_ENGINE,
+                          DB_PASSWORD, EMAIL_HOST, LOGGER_PATH, DB_ENGINE,
                           EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
                           EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL,
                           DEFAULT_FROM_EMAIL, DEBUG, INTERNAL_IPS)
 
-logger.add('logs.json', format='{time} {level} {message}', level='ERROR',
+logger.add(LOGGER_PATH, format='{time} {level} {message}', level='ERROR',
            rotation="500 MB",
            compression="zip", serialize=True)
 
