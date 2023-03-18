@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from loguru import logger
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
-import pypdfium2 as pdfium
+import fitz
+from PIL import Image
 from django.core.files.base import ContentFile
 from io import BytesIO
 from pathlib import Path
@@ -49,29 +50,30 @@ class AddTextBook(LoginRequiredMixin, CreateView):
     form_class = TextBookForm
     success_url = reverse_lazy('my_text_books')
 
-    #@logger.catch
     def form_valid(self, form):
-        text_book = form.save(commit=False)
-        text_book.owner_id = self.request.user.pk
-        # getting preview
-        pdf = pdfium.PdfDocument(self.request.FILES['book_file'].file)
-        page = pdf.get_page(0)
-        preview_image = page.render(
-            scale=1,
-            rotation=0,
-        )
-        preview_image = preview_image.to_pil()
-        preview_image.thumbnail((200, 200))
+        try:
+            text_book = form.save(commit=False)
+            text_book.owner_id = self.request.user.pk
 
-        image_io = BytesIO()
-        preview_image.save(image_io, format='JPEG')
-        image_data = image_io.getvalue()
-        content_file = ContentFile(image_data)
-        text_book.preview_image.save(f'text_book_preview_image{Path(text_book.book_file.name).stem}_preview.jpg',
-                                     content_file,
-                                     save=False)
-        text_book.save()
-        return HttpResponseRedirect(self.success_url)
+            pdf_file = fitz.open(self.request.FILES['book_file'].file)
+            page = pdf_file.load_page(0)
+            pix = page.get_pixmap()
+            preview_image = Image.frombytes('RGB', [pix.width, pix.height], pix.samples)
+            preview_image.thumbnail((200, 200))
+            image_io = BytesIO()
+            preview_image.save(image_io, format='JPEG')
+            image_data = image_io.getvalue()
+            content_file = ContentFile(image_data)
+            text_book.preview_image.save(f'text_book_preview_image{Path(text_book.book_file.name).stem}_preview.jpg',
+                                         content_file,
+                                         save=False)
+            text_book.save()
+            return HttpResponseRedirect(self.success_url)
+        except:
+            form.add_error(
+                'book_file', 'Некоректное имя или формат файла. Попробуйте его переименовать.'
+            )
+            return self.form_invalid(form)
 
 
 class EditTextBook(LoginRequiredMixin, UpdateView):

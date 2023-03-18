@@ -18,8 +18,8 @@ class TextBookForm(ModelForm):
         labels = {
             "name": "Название",
             "description": "Описание",
-            "book_file": "Учебник",
-            "keys_file": "Файл с ключами",
+            "book_file": "Учебник (в формате pdf)",
+            "keys_file": "Файл с ключами (в формате pdf)",
             "keys_page_number": "Страница, на которой начинаются ключи",
         }
 

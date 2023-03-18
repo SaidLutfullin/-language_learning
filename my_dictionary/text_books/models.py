@@ -1,6 +1,7 @@
 from django.db import models
 import os
 from django.urls import reverse
+from django.core.validators import FileExtensionValidator
 
 
 class TextBook(models.Model):
@@ -13,9 +14,8 @@ class TextBook(models.Model):
     owner = models.ForeignKey('authentication.user', on_delete=models.CASCADE)
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True, null=True)
-    book_file = models.FileField(upload_to=user_directory_path)
-    keys_file = models.FileField(upload_to=user_directory_path, blank=True, null=True)
-    # TODO delete null=true
+    book_file = models.FileField(upload_to=user_directory_path, validators=[FileExtensionValidator(['pdf'])])
+    keys_file = models.FileField(upload_to=user_directory_path, blank=True, null=True, validators=[FileExtensionValidator(['pdf'])])
     preview_image = models.ImageField(upload_to=user_directory_path)
     text_book_review = models
     current_page_number = models.IntegerField(default=1)
