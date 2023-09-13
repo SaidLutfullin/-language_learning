@@ -6,8 +6,8 @@ class Words(models.Model):
     russian_word = models.CharField('Русское слово', max_length=100)
     foreign_word = models.CharField('Иностранное слово', max_length=100)
     context = models.CharField('Контекст', max_length=100)
-    asking_date = models.DateField('Дата повторения')
-    box_number = models.IntegerField('Номер коробки', default=1)
+    asking_date = models.DateField('Дата повторения', null=True, blank=True)
+    box_number = models.IntegerField('Номер коробки', default=0)
     language = models.ForeignKey('dictionary.language', on_delete=models.PROTECT)
 
     def __str__(self):

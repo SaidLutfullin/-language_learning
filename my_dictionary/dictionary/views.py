@@ -29,6 +29,10 @@ class AddingWord(LoginRequiredMixin, FormView):
         word.russian_word = re.sub(r'\<[^>]*\>', '', word.russian_word)
         word.foreign_word = re.sub(r'\<[^>]*\>', '', word.foreign_word)
         word.context = re.sub(r'\<[^>]*\>', '', word.context)
+
+        if not form.cleaned_data['start_learning']:
+            word.asking_date = None
+
         word.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -37,7 +41,6 @@ class EditWord(LoginRequiredMixin, UpdateView):
     form_class = EditingForm
     template_name = 'dictionary/edit.html'
     success_url = reverse_lazy('dictionary')
-    initial = {'asking_date': date.today()}
 
     @logger.catch
     def get_object(self):
@@ -67,7 +70,7 @@ class EditWord(LoginRequiredMixin, UpdateView):
         word.context = re.sub(r'\<[^>]*\>', '', word.context)
 
         if 'save' in self.request.POST:
-            if form.cleaned_data['from_scratch']:
+            if form.cleaned_data['start_learning']:
                 word.save(update_fields=["russian_word", "foreign_word",
                                          "context", "asking_date"])
             else:

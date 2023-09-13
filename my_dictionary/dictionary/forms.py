@@ -19,6 +19,10 @@ class AddinWordForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['context'].required=False
 
+    start_learning = forms.BooleanField(label="Начать учить",
+                                      required=False,
+                                      widget=forms.CheckboxInput(attrs={'class': 'form-check-input toggle'}))
+
     class Meta:
         model = Words
         fields = ['russian_word', 'foreign_word', 'context', 'asking_date']
@@ -52,9 +56,8 @@ class AskingForm(forms.Form):
 
 
 class EditingForm(AddinWordForm):
-    from_scratch = forms.BooleanField(label="Учить по-новой",
-                                      required=False,
-                                      widget=forms.CheckboxInput(attrs={'class':'form-check-input toggle'}))
+    start_learning = forms.BooleanField(required=False,
+                                        widget=forms.CheckboxInput(attrs={'class': 'form-check-input toggle'}))
 
 
 class Exporting(forms.Form):

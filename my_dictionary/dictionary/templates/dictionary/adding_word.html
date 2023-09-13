@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link type="text/css" href="{% static 'dictionary/css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
 
 {% block title%}
 Добавление нового слова
@@ -9,7 +14,26 @@
     <h1>Добавьте новое слово</h1>
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        <p>
+            {{ form.russian_word.label_tag }}
+            {{ form.russian_word }}
+        </p>
+        <p>
+            {{ form.foreign_word.label_tag }}
+            {{ form.foreign_word }}
+        </p>
+        <p>
+            {{ form.context.label_tag }}
+            {{ form.context }}
+        </p>
+        <div class="mb-3">
+            {{ form.start_learning }}
+            {{ form.start_learning.label_tag }}<br>
+            <div class="hiden-div mt-2" id="input-date">
+                {{ form.asking_date.label_tag }}
+                {{ form.asking_date }}
+            </div>
+        </div>
         <button type="submit" class="btn btn-outline-primary">Добавить</button>
     </form>
 </div>

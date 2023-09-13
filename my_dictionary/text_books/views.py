@@ -54,8 +54,8 @@ class AddTextBook(LoginRequiredMixin, CreateView):
         try:
             text_book = form.save(commit=False)
             text_book.owner_id = self.request.user.pk
-
-            pdf_file = fitz.open(self.request.FILES['book_file'].file)
+            file = self.request.FILES['book_file'].file
+            pdf_file = fitz.open(stream=file.read())
             page = pdf_file.load_page(0)
             pix = page.get_pixmap()
             preview_image = Image.frombytes('RGB', [pix.width, pix.height], pix.samples)
@@ -67,6 +67,7 @@ class AddTextBook(LoginRequiredMixin, CreateView):
             text_book.preview_image.save(f'text_book_preview_image{Path(text_book.book_file.name).stem}_preview.jpg',
                                          content_file,
                                          save=False)
+
             text_book.save()
             return HttpResponseRedirect(self.success_url)
         except:

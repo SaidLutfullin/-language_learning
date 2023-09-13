@@ -12,8 +12,8 @@ class DiaryForm(ModelForm):
         widgets = {
             "date": forms.DateInput(format=('%Y-%m-%d'),
                                     attrs={'type': 'date',
-                                           'class': 'form-control w-25'}),
+                                           'class': 'form-control w-50'}),
                                             
             "title": forms.TextInput(attrs={'class': 'form-control'}),
-            "text": TinyMCE(attrs={'cols': 80, 'rows': 30})
+            "text": TinyMCE(attrs={'cols': 80, 'rows': 70})
         }

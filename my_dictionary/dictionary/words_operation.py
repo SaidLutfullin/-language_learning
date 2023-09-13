@@ -40,7 +40,7 @@ class Corrector():
         # start and end of discrepancy
         index_1 = len(correct_str)-1
         index_2 = 0
-        # is discrepancy index is les than null
+        # is discrepancy index is less than null
         ltn = False
         # is discrepancy index is more than end
         mte = False
@@ -51,12 +51,12 @@ class Corrector():
                 break
             elif c == len(users_str)-1:
                 # when users string is over, but discrepancy has not found
-                # means that the inded of the next symbol is discrepancy
+                # means that the index of the next symbol is discrepancy
                 index_1 = c+1
                 break
         else:
             # when loop is over, but discrepancy has not found
-            # means that users's string contain discrepancy after
+            # means that user's string contain discrepancy after
             # the last symbol
             mte = True
 
@@ -134,8 +134,8 @@ class TestItem:
         self.user = user
 
     @logger.catch
-    def make_question(self, random=True):
-        word = self._get_word(random)
+    def make_question(self):
+        word = self._get_word()
         if word == '':
             return False
         else:
@@ -212,17 +212,15 @@ class TestItem:
             self.help = self._question['answer'][:index+1]+((len(self.help)-index-1)*'*')
         return self.help
 
-    def _get_word(self, random):
+    def _get_word(self):
         try:
             today_date = date.today()
-            relevant_words = Words.objects.filter(asking_date__lte=today_date,
-                                                  user_id=self.user.id,
-                                                  language=self.user.language_learned)
-            if random:
-                relevant_words = relevant_words.order_by('?')
-            if relevant_words.exists():
-                word = relevant_words.first()
-            else:
+            words = Words.objects.filter(user_id=self.user.id,
+                                         language=self.user.language_learned)
+            word = words.filter(asking_date=today_date).order_by('?').first()
+            if word is None:
+                word = words.filter(asking_date__lt=today_date).order_by('?').first()
+            if word is None:
                 word = ""
         except Exception as error:
             word = ""

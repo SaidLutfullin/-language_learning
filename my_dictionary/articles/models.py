@@ -23,7 +23,7 @@ class Article(models.Model):
         verbose_name = 'Статьи'
         verbose_name_plural = 'Статьи'
         ordering = ['-date']
-
+    # TODO change search algiritm .first() raizes an exception
     @logger.catch
     def save(self, *args, **kwargs):
         if self.is_main_page:

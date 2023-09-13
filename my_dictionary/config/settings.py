@@ -16,6 +16,9 @@ SECRET_KEY = API_KEY
 DEBUG = DEBUG
 ALLOWED_HOSTS = ALLOWED_HOSTS
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 100
+FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -166,7 +169,7 @@ MESSAGE_TAGS = {
 
 
 TINYMCE_DEFAULT_CONFIG = {
-    "height": "500px",
+    "height": "70vh",
     "width": "100%",
     "menubar": "file edit view insert format tools table",
     "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "

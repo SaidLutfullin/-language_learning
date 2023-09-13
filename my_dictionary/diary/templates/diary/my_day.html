@@ -6,8 +6,7 @@
 {% endblock %}
 
 {% block body%}
-<div class="container mt-5">
-    <h1>Дорогой дневник...</h1>
+<div class="container-fluid">
     <form method="post">
     {% csrf_token %}
     {{ form.media }}

@@ -27,9 +27,14 @@
             {{ form.context }}
         </p>
         <div class="mb-3">
-            {{ form.from_scratch }}
-            {{ form.from_scratch.label_tag }}<br>
-            <div class="hiden-div" id="input-date">
+            {{ form.start_learning }}
+            {% if form.asking_date.value == Null %}
+                <label for="id_start_learning">Начать учить:</label>
+            {% else %}
+                <label for="id_start_learning">Учить по-новой:</label>
+            {% endif %}<br>
+
+            <div class="hiden-div mt-2" id="input-date">
                 {{ form.asking_date.label_tag }}
                 {{ form.asking_date }}
             </div>
