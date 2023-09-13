@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'django.contrib.postgres',
     'common.apps.CommonConfig',
     'dictionary.apps.DictionaryConfig',
     'authentication.apps.AuthenticationConfig',
@@ -38,7 +37,6 @@ INSTALLED_APPS = [
     'django_cleanup',
     'tinymce',
 ]
-
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
