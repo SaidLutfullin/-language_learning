@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'text_books.apps.TextBooksConfig',
     'django_cleanup',
     'tinymce',
-
 ]
 
 MIDDLEWARE = [
