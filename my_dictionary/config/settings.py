@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'corsheaders',
     'rest_framework',
     'common.apps.CommonConfig',
     'dictionary.apps.DictionaryConfig',
