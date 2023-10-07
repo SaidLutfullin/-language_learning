@@ -50,11 +50,6 @@ class AddinWordForm(ModelForm):
                 raise ValidationError('Контекст не содержит изучаемого слова')
         return context
 
-
-class AskingForm(forms.Form):
-    answer = forms.CharField(label='Перевод:', widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-
 class EditingForm(AddinWordForm):
     start_learning = forms.BooleanField(required=False,
                                         widget=forms.CheckboxInput(attrs={'class': 'form-check-input toggle'}))

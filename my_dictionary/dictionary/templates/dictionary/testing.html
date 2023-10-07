@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+<link type="text/css" href="{% static 'dictionary/css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+{{ constants|json_script:'constants' }}
+</script>
+{% endblock %}
+
+{% block title%}
+Мои карточки
+{% endblock %}
+
+{% block body%}
+<main class="container">
+    <div id="root"></div>
+</main>
+<script src="{% static 'dictionary/js/testing_app.js' %}"></script>
+{% endblock  %}

@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'corsheaders',
+    'rest_framework',
     'common.apps.CommonConfig',
     'dictionary.apps.DictionaryConfig',
     'authentication.apps.AuthenticationConfig',
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     'text_books.apps.TextBooksConfig',
     'django_cleanup',
     'tinymce',
+
 ]
 
 MIDDLEWARE = [
@@ -47,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
