@@ -8,4 +8,4 @@ openpyxl==3.1.0
 django-tinymce==3.5.0
 PyMuPDF==1.21.1
 djangorestframework==3.14.0
-djangorestframework==3.14.0
+django-cors-headers==4.2.0

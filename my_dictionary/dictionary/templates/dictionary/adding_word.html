@@ -17,14 +17,17 @@
         <p>
             {{ form.russian_word.label_tag }}
             {{ form.russian_word }}
+            {{ form.russian_word.errors }}
         </p>
         <p>
             {{ form.foreign_word.label_tag }}
             {{ form.foreign_word }}
+            {{ form.foreign_word.errors }}
         </p>
         <p>
             {{ form.context.label_tag }}
             {{ form.context }}
+            {{ form.context.errors }}
         </p>
         <div class="mb-3">
             {{ form.start_learning }}
@@ -32,6 +35,7 @@
             <div class="hiden-div mt-2" id="input-date">
                 {{ form.asking_date.label_tag }}
                 {{ form.asking_date }}
+                {{ form.asking_date.errors }}
             </div>
         </div>
         <button type="submit" class="btn btn-outline-primary">Добавить</button>

@@ -4,24 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Contact',
+            name="Contact",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=80, verbose_name='Имя')),
-                ('email', models.EmailField(max_length=100, verbose_name='E-mail')),
-                ('message', models.TextField(max_length=1000, verbose_name='Сообщение')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=80, verbose_name="Имя")),
+                ("email", models.EmailField(max_length=100, verbose_name="E-mail")),
+                (
+                    "message",
+                    models.TextField(max_length=1000, verbose_name="Сообщение"),
+                ),
             ],
             options={
-                'verbose_name': 'Обратная связь',
-                'verbose_name_plural': 'Обратная связь',
+                "verbose_name": "Обратная связь",
+                "verbose_name_plural": "Обратная связь",
             },
         ),
     ]
