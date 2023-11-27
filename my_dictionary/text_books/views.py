@@ -50,6 +50,7 @@ class TextBooksList(LoginRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        # TODO show only this language textbooks
         return self.model.objects.filter(owner_id=self.request.user.pk)
 
 

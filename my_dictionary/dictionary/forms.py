@@ -23,7 +23,8 @@ class AddinWordForm(ModelForm):
     start_learning = forms.BooleanField(
         label="Начать учить",
         required=False,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input toggle"}),
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input toggle",
+                                          "checked": "ture"}),
     )
 
     class Meta:

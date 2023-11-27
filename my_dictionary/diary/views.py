@@ -15,9 +15,12 @@ class NewDay(LoginRequiredMixin, FormView):
     model = Diary
     form_class = DiaryForm
     template_name = "diary/my_day.html"
-    success_url = reverse_lazy("my_diary")
+    # success_url = reverse_lazy("my_diary")
     initial = {"date": date.today()}
     pk_url_kwarg = "day"
+
+    def get_success_url(self):
+        return reverse_lazy("edit_day", kwargs={"day": self.kwargs.get("day")})
 
     def form_valid(self, form):
         diary = form.save(commit=False)
