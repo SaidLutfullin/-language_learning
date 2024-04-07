@@ -5,42 +5,18 @@
 <link type="text/css" href="{% static 'dictionary/css/styles.css' %}" rel="stylesheet" />
 {% endblock %}
 
+{% block scripts %}
+{{ constants|json_script:'constants' }}
+{% endblock %}
+
 {% block title%}
 Редактирование слова
 {% endblock %}
 
 {% block body%}
-<div class="container mt-5">
+<div class="container bg-light p-5 rounded">
     <h1>Редактирование слова</h1>
-    <form method="post">
-       {% csrf_token %}    
-       <p>
-            {{ form.russian_word.label_tag }}
-            {{ form.russian_word }}
-        </p>
-        <p>
-            {{ form.foreign_word.label_tag }}
-            {{ form.foreign_word }}
-        </p>
-        <p>
-            {{ form.context.label_tag }}
-            {{ form.context }}
-        </p>
-        <div class="mb-3">
-            {{ form.start_learning }}
-            {% if form.asking_date.value == Null %}
-                <label for="id_start_learning">Начать учить:</label>
-            {% else %}
-                <label for="id_start_learning">Учить по-новой:</label>
-            {% endif %}<br>
-
-            <div class="hiden-div mt-2" id="input-date">
-                {{ form.asking_date.label_tag }}
-                {{ form.asking_date }}
-            </div>
-        </div>
-       <button type="submit" name="save" class="btn btn-success">Сохранить</button>
-       <button type="submit" name="delete" class="btn btn-danger">Удалить</button>
-    </form>
+    <div id="root"></div>
 </div>
+<script src="{% static 'dictionary/js/words_form.js' %}"></script>
 {% endblock %}

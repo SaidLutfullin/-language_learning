@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ServicePageView
+from .views import ServicePageView, TextToSpeechAPIView
 
 urlpatterns = [
     path(
@@ -15,4 +15,5 @@ urlpatterns = [
         {"page_type": "privacy_policy"},
         name="privacy_policy",
     ),
+    path("api/v1/tts", TextToSpeechAPIView.as_view(), name="tts"),
 ]

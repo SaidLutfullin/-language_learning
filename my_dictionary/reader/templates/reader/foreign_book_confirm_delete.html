@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Удаление книги
+{% endblock %}
+
+{% block body%}
+<div class="container">
+    <div class="bg-light p-5 rounded">
+    <div class="container">
+        <h1>Подтвердите удаление</h1>
+            <p>Уверены что хотите удалить книгу?</p>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-danger">Подтвердить</button>
+            </form>
+    </div>
+    </div>
+</div>
+
+{% endblock%}

@@ -1,18 +1,9 @@
 from django.urls import path
 
-from .views import (
-    ChangePassword,
-    ChangePasswordDone,
-    LoginUser,
-    MyProfile,
-    MyProfileEdit,
-    PasswordResetComplete,
-    PasswordResetConfirm,
-    PasswordResetDone,
-    RegisterUser,
-    ResetPassword,
-    logout_user,
-)
+from .views import (ChangePassword, ChangePasswordDone, LoginUser, MyProfile,
+                    MyProfileEdit, PasswordResetComplete, PasswordResetConfirm,
+                    PasswordResetDone, RegisterUser, ResetPassword,
+                    logout_user)
 
 urlpatterns = [
     path("login", LoginUser.as_view(), name="login"),

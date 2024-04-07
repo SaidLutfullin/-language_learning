@@ -3,24 +3,12 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 from loguru import logger
 
-from config.config_file import (
-    ALLOWED_HOSTS,
-    API_KEY,
-    DB_ENGINE,
-    DB_NAME,
-    DB_PASSWORD,
-    DB_USER,
-    DEBUG,
-    DEFAULT_FROM_EMAIL,
-    EMAIL_HOST,
-    EMAIL_HOST_PASSWORD,
-    EMAIL_HOST_USER,
-    EMAIL_PORT,
-    EMAIL_USE_SSL,
-    EMAIL_USE_TLS,
-    INTERNAL_IPS,
-    LOGGER_PATH,
-)
+from config.config_file import (ALLOWED_HOSTS, API_KEY, DB_ENGINE, DB_NAME,
+                                DB_PASSWORD, DB_USER, DEBUG,
+                                DEFAULT_FROM_EMAIL, EMAIL_HOST,
+                                EMAIL_HOST_PASSWORD, EMAIL_HOST_USER,
+                                EMAIL_PORT, EMAIL_USE_SSL, EMAIL_USE_TLS,
+                                INTERNAL_IPS, LOGGER_PATH)
 
 logger.add(
     LOGGER_PATH,
@@ -56,6 +44,7 @@ INSTALLED_APPS = [
     "feedback.apps.FeedbackConfig",
     "diary.apps.DiaryConfig",
     "text_books.apps.TextBooksConfig",
+    "reader.apps.ReaderConfig",
     "django_cleanup",
     "tinymce",
 ]

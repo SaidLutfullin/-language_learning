@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+<link type="text/css" href="{% static 'reader/css/styles.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static 'common/css/tables.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+{{ constants|json_script:'constants' }}
+{% endblock %}
+
+{% block title%}
+{{ object.title }}
+{% endblock %}
+
+{% block body%}
+<main class="container">
+    <div id="root"></div>
+</main>
+<script src="{% static 'reader/js/reader.js' %}"></script>
+<script src="{% static 'text_books/js/tinymce/tinymce.min.js' %}"></script>
+{% endblock  %}
+
+{% block footer_scripts %}
+
+
+{% endblock %}

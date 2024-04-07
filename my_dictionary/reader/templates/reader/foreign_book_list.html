@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Мои иностранные книги
+{% endblock %}
+
+{% block body%}
+<div class="container  mt-5">
+    <div class="container rounded mt-5 text-bg-dark">
+        <div class="p-4 p-md-5 mb-4 rounded">
+            <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Мои иностранные книги</h1>
+            <p class="lead my-3">Читайте книги на иностранном языке с помощью, переводите непонятные слова и сразу же добавляйте в словарь.</p>
+            <a class="btn btn-outline-warning rounded-pill non_underline" href="{% url 'foreign_books_create' %}">Добавить новую книгу</a>
+            </div>
+        </div>
+    </div>
+    <div class="container  mt-5">
+    {% for book in object_list %}
+        <div class="col-md-12">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+            <h3 class="mb-0">{{ book.title }}</h3>
+                <a href="{% url 'show_foreign_book' book_id=book.pk %}" class="stretched-link">Читать полностью</a>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+    {% include 'common/inc/_pagination.html' %}
+    </div>
+</div>
+{% endblock %}

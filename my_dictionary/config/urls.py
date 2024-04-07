@@ -14,6 +14,7 @@ urlpatterns = [
     path("", include("feedback.urls")),
     path("", include("common.urls")),
     path("", include("text_books.urls")),
+    path("", include("reader.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

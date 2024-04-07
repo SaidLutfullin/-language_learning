@@ -1,56 +1,43 @@
-import re
-from datetime import date
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import FileResponse, HttpResponseRedirect
+from django.http import FileResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, ListView, TemplateView, UpdateView
+from django.views.generic import FormView, ListView, TemplateView
 from loguru import logger
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.models import ServicePage
-
-from .forms import AddinWordForm, EditingForm, Exporting
-from .models import Words
-from .serializers import WordAnswerSerializer, WordsSerializer
-from .words_operation import (
-    export_words,
-    get_dictionary_statistics,
-    get_question,
-    get_words_list,
-    send_answer,
-)
+from dictionary.forms import Exporting
+from dictionary.models import Words
+from dictionary.serializers import (WordAnswerSerializer, WordCreateSerializer,
+                                    WordsSerializer)
+from dictionary.words_operation import (export_words,
+                                        get_dictionary_statistics,
+                                        get_question, get_words_list,
+                                        send_answer)
 
 
-class AddingWord(LoginRequiredMixin, FormView):
-    form_class = AddinWordForm
+class AddingWord(LoginRequiredMixin, TemplateView):
     template_name = "dictionary/adding_word.html"
-    success_url = reverse_lazy("adding_word")
-    initial = {"asking_date": date.today()}
 
-    @logger.catch
-    def form_valid(self, form):
-        word = form.save(commit=False)
-        word.user_id = self.request.user.pk
-        word.language = self.request.user.language_learned
-        word.russian_word = re.sub(r"\<[^>]*\>", "", word.russian_word)
-        word.foreign_word = re.sub(r"\<[^>]*\>", "", word.foreign_word)
-        word.context = re.sub(r"\<[^>]*\>", "", word.context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-        if not form.cleaned_data["start_learning"]:
-            word.asking_date = None
-
-        word.save()
-        return HttpResponseRedirect(self.get_success_url())
+        context["constants"] = {
+            "API_URL": self.request.build_absolute_uri("/") + "api/v1/",
+            "csrfToken": get_token(self.request),
+            "user_lang": self.request.user.language_learned.language_code,
+        }
+        return context
 
 
-class EditWord(LoginRequiredMixin, UpdateView):
-    form_class = EditingForm
+class EditWord(LoginRequiredMixin, TemplateView):
     template_name = "dictionary/edit.html"
     success_url = reverse_lazy("dictionary")
 
@@ -60,43 +47,42 @@ class EditWord(LoginRequiredMixin, UpdateView):
             Words, pk=self.request.GET.get("id"), user_id=self.request.user.pk
         )
 
-    @logger.catch
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        word = self.get_object()
+
+        context["constants"] = {
+            "API_URL": self.request.build_absolute_uri("/") + "api/v1/",
+            "csrfToken": get_token(self.request),
+            "user_lang": self.request.user.language_learned.language_code,
+            "word_id": word.id,
+            "russian_word": word.russian_word,
+            "foreign_word": word.foreign_word,
+            "context": word.context,
+            "asking_date": word.asking_date,
+            "success_url": reverse_lazy("dictionary"),
+        }
+        return context
+
+
+class CreateUpdateWordAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin):
+    model = Words
+    serializer_class = WordCreateSerializer
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(user=self.request.user)
+        return queryset
+
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
+        return self.create(request, *args, **kwargs)
 
-        if "delete" in self.request.POST:
-            self.object.delete()
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            if form.is_valid():
-                return self.form_valid(form)
-            else:
-                return self.form_invalid(form)
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
-    @logger.catch
-    def form_valid(self, form):
-        word = form.save(commit=False)
-        # delete html tags from users strings just in case
-        word.russian_word = re.sub(r"\<[^>]*\>", "", word.russian_word)
-        word.foreign_word = re.sub(r"\<[^>]*\>", "", word.foreign_word)
-        word.context = re.sub(r"\<[^>]*\>", "", word.context)
-
-        if "save" in self.request.POST:
-            if form.cleaned_data["start_learning"]:
-                word.box_number = 0
-                word.save(
-                    update_fields=[
-                        "russian_word",
-                        "foreign_word",
-                        "context",
-                        "asking_date",
-                        "box_number",
-                    ]
-                )
-            else:
-                word.save(update_fields=["russian_word", "foreign_word", "context"])
-        return HttpResponseRedirect(self.get_success_url())
+    def perform_create(self, serializer):
+        user = self.request.user
+        language = self.request.user.language_learned
+        serializer.save(user=user, language=language)
 
 
 class Dictionary(LoginRequiredMixin, ListView):
@@ -131,7 +117,9 @@ class TestView(LoginRequiredMixin, TemplateView):
             "question_type": self.kwargs["question_type"],
             "word_operations_api": reverse("word_operations_api"),
             "get_success_page_api": reverse("get_success_page_api"),
+            "tts": reverse("tts"),
             "csrfToken": get_token(self.request),
+            "user_lang": self.request.user.language_learned.language_code,
         }
         return context
 
@@ -153,8 +141,10 @@ class Exporting(LoginRequiredMixin, FormView):
 
 # API endpoints
 class WordOperations(LoginRequiredMixin, APIView):
+
     def get(self, request):
-        question = get_question(request.user)
+        excluded_word_id = request.query_params.get("excludedWordID")
+        question = get_question(request.user, excluded_word_id)
         serializer = WordsSerializer(question)
         return Response(serializer.data)
 
@@ -169,6 +159,7 @@ class WordOperations(LoginRequiredMixin, APIView):
 
 
 class GetSuccessPage(LoginRequiredMixin, APIView):
+
     def get(self, request):
         try:
             page = ServicePage.objects.filter(page_type="test_completed").first()

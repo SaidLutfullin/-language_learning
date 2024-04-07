@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Иностранная книга
+{% endblock %}
+
+{% block body%}
+<div class="container bg-light p-5 rounded">
+    <h1>Добавьте новую книгу</h1>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+    {% if editing %}
+    <a href="delete" class="btn btn-outline-danger non_underline">Удалить</a>
+    {% endif %}
+    </form>
+</div>
+{% endblock%}

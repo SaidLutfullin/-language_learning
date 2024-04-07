@@ -1,15 +1,12 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import (
-    LoginView,
-    PasswordChangeDoneView,
-    PasswordChangeView,
-    PasswordResetCompleteView,
-    PasswordResetConfirmView,
-    PasswordResetDoneView,
-    PasswordResetView,
-)
+from django.contrib.auth.views import (LoginView, PasswordChangeDoneView,
+                                       PasswordChangeView,
+                                       PasswordResetCompleteView,
+                                       PasswordResetConfirmView,
+                                       PasswordResetDoneView,
+                                       PasswordResetView)
 from django.db import connection
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -21,14 +18,9 @@ from common.mixins.service_page_mixin import ServicePageMixin
 from diary.models import Diary
 from dictionary.words_operation import get_dictionary_statistics
 
-from .forms import (
-    CustomPasswordChangeForm,
-    CustomPasswordResetForm,
-    CustomSetPasswordForm,
-    CustomUserChangeForm,
-    LoginUserForm,
-    RegisterUserForm,
-)
+from .forms import (CustomPasswordChangeForm, CustomPasswordResetForm,
+                    CustomSetPasswordForm, CustomUserChangeForm, LoginUserForm,
+                    RegisterUserForm)
 from .models import User
 
 

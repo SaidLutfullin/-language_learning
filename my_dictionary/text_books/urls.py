@@ -1,15 +1,9 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from text_books.views import (
-    AddTextBook,
-    DeleteTextBook,
-    EditTextBook,
-    ExerciseViewSet,
-    TextBookManager,
-    TextBooksList,
-    TextBookRetrieveAPIView,
-)
+from text_books.views import (AddTextBook, DeleteTextBook, EditTextBook,
+                              ExerciseViewSet, TextBookManager,
+                              TextBookRetrieveAPIView, TextBooksList)
 
 router = routers.DefaultRouter()
 

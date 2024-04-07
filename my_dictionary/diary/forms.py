@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from tinymce.widgets import TinyMCE
 
-from .models import Diary
+from diary.models import Diary
 
 
 class DiaryForm(ModelForm):

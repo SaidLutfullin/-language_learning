@@ -12,10 +12,12 @@ from openpyxl.utils import get_column_letter
 from .models import Words
 
 
-def get_question(user):
+def get_question(user, excluded_word_id):
     try:
         today_date = date.today()
         words = Words.objects.filter(user_id=user.id, language=user.language_learned)
+        if excluded_word_id is not None:
+            words = words.exclude(pk=excluded_word_id)
         word = words.filter(asking_date=today_date).order_by("?").first()
         if word is None:
             word = words.filter(asking_date__lt=today_date).order_by("?").first()

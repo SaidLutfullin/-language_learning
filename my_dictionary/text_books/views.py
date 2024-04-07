@@ -8,14 +8,8 @@ from django.core.files.base import ContentFile
 from django.http import Http404, HttpResponseRedirect
 from django.middleware.csrf import get_token
 from django.urls import reverse, reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    ListView,
-    TemplateView,
-    UpdateView,
-)
-
+from django.views.generic import (CreateView, DeleteView, ListView,
+                                  TemplateView, UpdateView)
 from PIL import Image
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
@@ -37,7 +31,9 @@ class TextBookManager(LoginRequiredMixin, TemplateView):
         context["constants"] = {
             "text_book_id": text_book_id,
             "API_URL": reverse("api-root"),
-            "edit_text_book_url": reverse("edit_text_book", kwargs={'text_book_id': text_book_id}),
+            "edit_text_book_url": reverse(
+                "edit_text_book", kwargs={"text_book_id": text_book_id}
+            ),
             "csrfToken": get_token(self.request),
         }
         return context
