@@ -42,14 +42,15 @@ class ForeignBookCreateView(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse_lazy(
-            "show_foreign_book", kwargs={"book_id": self.kwargs.get("book_id")}
+            "show_foreign_book", kwargs={"book_id": self.foreign_book.pk}
         )
 
+
     def form_valid(self, form):
-        foreign_book = form.save(commit=False)
-        foreign_book.user_id = self.request.user.pk
-        foreign_book.language = self.request.user.language_learned
-        foreign_book.save()
+        self.foreign_book = form.save(commit=False)
+        self.foreign_book.user_id = self.request.user.pk
+        self.foreign_book.language = self.request.user.language_learned
+        self.foreign_book.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -89,7 +90,6 @@ class ForeignBookShow(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         book_id = context["object"].pk
         context["constants"] = {
             "API_URL": self.request.build_absolute_uri("/") + "api/v1/",

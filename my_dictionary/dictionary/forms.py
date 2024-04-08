@@ -8,10 +8,11 @@ from .models import Language, Words
 class LanguageAdminForm(forms.ModelForm):
     class Meta:
         model = Language
-        fields = ("language_name",)
+        fields = ("language_name", "language_code")
 
         widgets = {
             "language_name": forms.TextInput(attrs={"class": "form-control"}),
+            "language_code": forms.TextInput(attrs={"class": "form-control"}),
         }
 
 

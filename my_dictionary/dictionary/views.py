@@ -8,7 +8,7 @@ from django.views.generic import FormView, ListView, TemplateView
 from loguru import logger
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -65,7 +65,7 @@ class EditWord(LoginRequiredMixin, TemplateView):
         return context
 
 
-class CreateUpdateWordAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin):
+class CreateUpdateDeleteWordAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
     model = Words
     serializer_class = WordCreateSerializer
 
@@ -78,6 +78,9 @@ class CreateUpdateWordAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         user = self.request.user

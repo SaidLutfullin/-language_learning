@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (AddingWord, CreateUpdateWordAPIView, Dictionary, EditWord,
+from .views import (AddingWord, CreateUpdateDeleteWordAPIView, Dictionary, EditWord,
                     Exporting, GetSuccessPage, TestView, WordOperations)
 
 urlpatterns = [
@@ -16,10 +16,14 @@ urlpatterns = [
     path(
         "api/v1/get_success_page", GetSuccessPage.as_view(), name="get_success_page_api"
     ),
-    path("api/v1/add_word", CreateUpdateWordAPIView.as_view(), name="adding_word_api"),
+    path("api/v1/add_word", CreateUpdateDeleteWordAPIView.as_view(), name="adding_word_api"),
     path(
         "api/v1/update_word/<int:pk>",
-        CreateUpdateWordAPIView.as_view(),
+        CreateUpdateDeleteWordAPIView.as_view(),
         name="updating_word_api",
+    ),
+    path("api/v1/delete_word/<int:pk>",
+         CreateUpdateDeleteWordAPIView.as_view(),
+         name="deleting_word_api"
     ),
 ]
