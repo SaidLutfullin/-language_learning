@@ -63,3 +63,8 @@
   width: 100%;
   text-align: center;
 }
+
+.pdf-book-container {
+  overflow: auto;
+  width: 100%!important;
+}
