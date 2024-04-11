@@ -25,7 +25,6 @@ class TextBook(models.Model):
         validators=[FileExtensionValidator(["pdf"])],
     )
     preview_image = models.ImageField(upload_to=user_directory_path)
-    text_book_review = models
     current_page_number = models.IntegerField(default=1)
     keys_page_number = models.IntegerField(default=1)
 

@@ -30,7 +30,7 @@
                     {% if request.user.is_authenticated %}
                     <li><a href="{% url 'dictionary' %}" class="px-2 menu-item">Мой словарь</a></li>
                     <li><a href="{% url 'my_diary' %}" class="px-2 menu-item">Мой дневник</a></li>
-                    <li><a href="{% url 'foreign_books' %}" class="px-2 menu-item">Мои книги</a></li>
+                    <li><a href="{% url 'foreign_books_choose_type' %}" class="px-2 menu-item">Мои книги</a></li>
                     <li><a href="{% url 'my_text_books' %}" class="px-2 menu-item">Мои учебники</a></li>
                     {% endif %}
                     <li><a href="{% url 'contact_us' %}" class="px-2 menu-item">Контакты</a></li>
@@ -80,7 +80,7 @@
                 {% if request.user.is_authenticated %}
                 <li class="nav-item"><a href="{% url 'dictionary' %}" class="nav-link px-2 text-muted">Мой словарь</a></li>
                 <li class="nav-item"><a href="{% url 'my_diary' %}" class="nav-link px-2 text-muted">Мой дневник</a></li>
-                <li class="nav-item"><a href="{% url 'foreign_books' %}" class="nav-link px-2 text-muted">Мои книги</a></li>
+                <li class="nav-item"><a href="{% url 'foreign_books_choose_type' %}" class="nav-link px-2 text-muted">Мои книги</a></li>
                 <li class="nav-item"><a href="{% url 'my_text_books' %}" class="nav-link px-2 text-muted">Мои учебники</a></li>
                 {% endif %}
                 <li class="nav-item"><a href="{% url 'user_agreement' %}" class="nav-link px-2 text-muted">Пользовательское соглашение</a></li>

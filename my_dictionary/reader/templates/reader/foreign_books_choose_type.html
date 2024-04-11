@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Выберите тип иностранной книги
+{% endblock %}
+
+{% block body%}
+<div class="container  mt-5">
+    <div class="container rounded mt-5 text-bg-dark">
+        <div class="p-4 p-md-5 mb-4 rounded">
+            <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Иностранные книги</h1>
+            <p class="lead my-3">Выберите тип иностранной книги. Вы хотите загрузить ее в виде текста или в виде pdf</p>
+            <a href="{% url 'foreign_books' %}" class="btn btn-outline-warning rounded-pill non_underline me-2">В виде текста</a>
+            <a href="{% url 'PDFbook_list' %}" class="btn btn-outline-warning rounded-pill non_underline">В виде PDF</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

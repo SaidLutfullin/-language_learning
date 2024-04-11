@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title%}
+{% if object %}
+Редактировать книгу {{ object.name }}
+{% else %}
+Добавить книгу
+{% endif %}
+{% endblock %}
+
+{% block body%}
+<main class="container">
+    <div class="bg-light p-5 rounded">
+        <div class="container">
+            {% if object %}
+            <h1>Редактировать книгу {{ object.name }}</h1>
+            {% else %}
+            <h1>Добавить книгу</h1>
+            {% endif %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-outline-success">Сохранить</button>
+                    {% if object %}
+                    <a href="{% url 'PDFbook_delete' book_id=object.id %}" class="btn btn-outline-danger non_underline">Удалить книгу</a>
+                    {% endif %}
+                </form>
+        </div>
+    </div>
+</main>
+{% endblock  %}

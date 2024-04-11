@@ -8,7 +8,8 @@ from django.views.generic import FormView, ListView, TemplateView
 from loguru import logger
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   UpdateModelMixin)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -65,7 +66,9 @@ class EditWord(LoginRequiredMixin, TemplateView):
         return context
 
 
-class CreateUpdateDeleteWordAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
+class CreateUpdateDeleteWordAPIView(
+    GenericAPIView, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
+):
     model = Words
     serializer_class = WordCreateSerializer
 
